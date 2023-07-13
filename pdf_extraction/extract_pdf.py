@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import urllib.request
 import os
 
 def download_pdf(target_year, target_month, target_directory):
