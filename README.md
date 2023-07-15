@@ -3,7 +3,7 @@
 
  The workflow should consist of these steps: <br />
 	1) PDF extraction <br />
-	2) PDF segmentation <br />
+	2) PDF segmentation using https://github.com/Kohulan/DECIMER-Image-Segmentation/tree/master <br />
 	3) Optical Chemical Structure Recognition (OCSR, most likely with DECIMER) <br />
 	4) Validation through cross-reference with PubChem or UniChem <br />
 	5) Results export as .csv <br />
