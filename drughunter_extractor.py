@@ -3,7 +3,7 @@ print("Importing...")
 import argparse
 import requests
 from bs4 import BeautifulSoup
-import calendar
+from calendar import month_name
 from decimer_segmentation import segment_chemical_structures, segment_chemical_structures_from_file
 from DECIMER import predict_SMILES
 from pdf2image import convert_from_bytes
@@ -17,6 +17,11 @@ import pandas as pd
 def download_pdf(target_year: int, target_month: str):
     """Attempt to download a pdf file from drughunter molecules
     of the month based on given target year and month
+
+    Params: year and month of the target drug of the month set
+
+    Returns: the first file with the .pdf ending that has been found on the
+    web page in the byte format
     
     As of 13/7/2023 as seen in 13-7-2023-test.log
     succesfully downloaded all available molecules of the month pdfs
@@ -55,23 +60,22 @@ def download_pdf(target_year: int, target_month: str):
         print("Failed to download the PDF.")
     return None
 
-def segment_pdf(pdf_dict):
-    """
-    Uses decimer_segmentation to take a pdf page
-    from input_path
-    and segment it into individual images
-    containing chemical structures.
-
-    Segments are collected into a dict and are returned
-    with a tuple key in the format (month_number, segment_number) 
+def segment_pdf(pdf_list, pdf_month_list):
+    """Iterate through the pdfs in pdf_list
+    Use decimer_segmentation to get segmented images from the pdfs
+    
+    Params: list of pdfs and list of months with matching indexes
+    
+    Returns: list of segments and list of months and segment_numbers with matching indexes
     """
 
     # on windows, this only works if poppler is installed and in PATH
     # otherwise the path to poppler needs to be specified in the poppler_path parameter
-    segment_dict = {}
-    for key in pdf_dict.keys():
+    segment_list = []
+    segment_month_list = []
+    segment_number_list = []
+    for pdf_index, pdf in enumerate(pdf_list):
         segment_count = 0
-        pdf = pdf_dict[key]
         pages = convert_from_bytes(pdf, 300)
 
         for page_number, page in enumerate(pages):
@@ -85,107 +89,117 @@ def segment_pdf(pdf_dict):
             for segment in segments:
                 segment_count += 1
                 image = Image.fromarray(segment)
-                segment_dict[(key, segment_count)] = image
-            print(f"Found {segment_count} segments in the {calendar.month_name[key]} set.")
-    if segment_dict:
-        return segment_dict
+                segment_list.append(image)
+                segment_month_list.append(pdf_month_list[pdf_index])
+                segment_number_list.append(segment_count)
+            print(f"Found {segment_count} segments in the {pdf_month_list[pdf_index]} set page {page_number}.")
+    if segment_list:
+        return segment_list, segment_month_list, segment_number_list
     else:
         print("No segments featuring chemical structures have been found.")
+        return None, None, None
 
-def recognize_segments(image_dict):
-    """Iterates through the input_directory
-    and attempts to recognize every file within it
+def recognize_segments(image_list):
+    """Iterates through the image_list
+    and attempts to recognize every image within it using decimer
     as a SMILES string and appends it to the output list
+
+    Params: list of images to recognize
+
+    Returns: list of recognized SMILES strings with matching indexing
     """
-    smiles_dict = {}
-    for key in image_dict.keys():
-        print(f"Recognizing image {key[1]} from the {calendar.month_name[key[0]]} set.")
-        tmp_img = image_dict[key]
-        tmp_img.save("tmp.png")
+    print("Recognizing:")
+    smiles_list = []
+    for img in image_list:
+        # unfortunately predict_smiles only accepts path to image as input
+        # so creating a temporary file for this purpose is necessary
+        img.save("tmp.png")
+        # predict_SMILES has no internal failure mode so try: expect: block is skipped
+        # the output list will always be created and contain something, whether
+        # that is a valid SMILES or not is checked later
         SMILES = predict_SMILES("tmp.png")
-        smiles_dict[key] = SMILES
+        smiles_list.append(SMILES)
     os.remove("tmp.png")
-    return smiles_dict
+    return smiles_list
 
 def smiles_to_inchi(smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         print(f"Smiles: {smiles} is not a valid smiles string.")
-        return ""
+        return "Invalid SMILES"
     inchi = Chem.MolToInchi(mol)
     return inchi
 
-def smiles_dict_to_inchi_dict(smiles_dict):
-    inchi_dict = {}
-    for key in smiles_dict.keys():
-        inchi_dict[key] = smiles_to_inchi(smiles_dict[key])
-    return inchi_dict
+def smiles_list_to_inchi_list(smiles_list):
+    print("Converting smiles to inchi")
+    inchi_list = []
+    for smiles in smiles_list:
+        inchi_list.append(smiles_to_inchi(smiles))
+    return inchi_list
     
+def validate_inchi(inchi_list):
+    print("Validating inchi through UNICHEM.")
+    # update in case the api changes again
+    url = "https://www.ebi.ac.uk/unichem/api/v1/compounds"
+
+    payload = {"type": "inchi", "compound": ""}
+
+    headers = {"Content-Type": "application/json"}
+
+    validated_list = []
+    for inchi in inchi_list:
+        payload["compound"] = inchi
+        response = requests.request("POST", url, json=payload, headers=headers)
+        resp_dict = response.json()
+        if resp_dict["response"] != "Not found":
+            validated_list.append(True)
+        else:
+            validated_list.append(False)
+
+    return validated_list
+
 def main(target_year):
     ### PDF EXTRACTION ##########################################################################
     # attempts to download all drugs of the month sets for each month within the year
-    pdf_dict = {}
+    pdf_list = []
+    month_list = []
     for index in range(1, 13):
-        target_month = calendar.month_name[index]
-        print(f"Attempting to download {target_month}-{target_year}")
-        result = download_pdf(target_year, target_month)
+        print(f"Attempting to download {month_name[index]}-{target_year}")
+        result = download_pdf(target_year, month_name[index])
         if result:
-            pdf_dict[index] = result
+            pdf_list.append(result)
+            month_list.append(month_name[index])
     
     # no sets were successfully extracted
-    if not pdf_dict:
+    if not pdf_list:
         print("Failed to download any sets.")
         return
     
     ### SEGMENTATION ############################################################################
 
-    segment_dict = segment_pdf(pdf_dict)
+    segment_list, segment_month_list, segment_number_list = segment_pdf(pdf_list, month_list)
     
-    if not segment_dict:
+    if not segment_list:
         return
-
+  
     ### RECOGNITION #############################################################################
 
-    smiles_dict = recognize_segments(segment_dict)
+    smiles_list = recognize_segments(segment_list)
 
-    ### VALIDATION AND EXPORT ###################################################################
-    
-    print("Validating recognized smiles through UNICHEM.")
-        
-    inchi_dict = smiles_dict_to_inchi_dict(smiles_dict)
+    ### VALIDATION ##############################################################################
 
-    # update in case the api changes again
-    url = "https://www.ebi.ac.uk/unichem/api/v1/compounds"
+    inchi_list = smiles_list_to_inchi_list(smiles_list)
 
-    payload = {
-        "type": "inchi",
-        "compound": ""
-    }
+    validated_list = validate_inchi(inchi_list)
 
-    headers = {"Content-Type": "application/json"}
-
-    validated_dict = {}
-    for key in inchi_dict:
-        payload["compound"] = inchi_dict[key]
-        response = requests.request("POST", url, json=payload, headers=headers)
-        resp_dict = response.json()
-        if resp_dict["response"] != "Not found":
-            validated_dict[key] = True
-        else:
-            validated_dict[key] = False
+    ### EXPORT ##################################################################################
     
     print("Exporting results.")    
-    year_list, month_list, n_list = [], [], []
-    for key in validated_dict.keys():
-        year_list.append(target_year)
-        month_list.append(key[0])
-        n_list.append(key[1])
 
-    results = {"year":  year_list, "month": month_list, "n": n_list, \
-               "smiles": smiles_dict.values(), "inchi": inchi_dict.values(), "validated by Unichem": validated_dict.values()}
+    results = {"year":  [target_year] * len(validated_list), "segment_month": segment_month_list, "segment_number": segment_number_list, \
+               "smiles": smiles_list, "inchi": inchi_list, "validated by Unichem": validated_list}
     df = pd.DataFrame(results)
     df.to_csv('results.csv')
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='DrugHunter extractor')
