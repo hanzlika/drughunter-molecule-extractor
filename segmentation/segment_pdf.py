@@ -1,25 +1,25 @@
-from decimer_segmentation import segment_chemical_structures, segment_chemical_structures_from_file
-from pdf2image import convert_from_path
+from decimer_segmentation import segment_chemical_structures
+from pdf2image import convert_from_bytes
 from PIL import Image
 import numpy as np
 import os
 
-def segment_pdf(input_path, output_directory):
+def segment_pdf(pdf):
     """
-    Uses decimer_segmentation to take a pdf page
-    from input_path
-    and segment it into individual images
-    containing chemical structures.
+    Iterate through the PDF pages and use decimer_segmentation to get segmented images.
 
-    Afterwards saves the segments into designated output_directory
+    Params:
+    - pdf (bytes): The PDF file content in bytes.
+
+    Returns:
+    - List[Image]: A list of segmented images extracted from the PDF.
     """
-
-    os.makedirs(output_directory, exist_ok=True)
 
     # on windows, this only works if poppler is installed and in PATH
     # otherwise the path to poppler needs to be specified in the poppler_path parameter
-    pages = convert_from_path(input_path, 300)
-
+    segment_list = []
+    pages = convert_from_bytes(pdf, 300)
+    
     for page_number, page in enumerate(pages):
 
         # visualization can be set to True for a visual confirmation of the segmentation
@@ -28,14 +28,20 @@ def segment_pdf(input_path, output_directory):
                                                expand=True,
                                                visualization=False)
 
-        for segment_number, segment in enumerate(segments):
+        for segment in segments:
             image = Image.fromarray(segment)
-            image.save(f"{output_directory}\page_{page_number}_segment_{segment_number}.png")
+            segment_list.append(image)
+
+    return segment_list
 
 def main():
-    input_path = 'pdf_extraction\pdfs\DH-MOTM-Poster-May2023.pdf'
-    output_directory = 'segmentation\segments'
-    segment_pdf(input_path, output_directory)
+    # example use:
+    pdf_list = []
+    segment_list = []
+    for filename, pdf in pdf_list:
+        result = segment_pdf(pdf)
+        to_append = [(filename, image) for image in result]
+        segment_list += to_append
 
 if __name__ == '__main__':
     main()
