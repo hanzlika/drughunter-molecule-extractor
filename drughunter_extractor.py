@@ -9,8 +9,9 @@ import pandas as pd
 from pdf_extraction.extract_pdf import download_pdf
 from segmentation.segment_pdf import segment_pdf
 from recognition.recognize_segments import recognize_segments
-from conversion.tools import smiles_to_inchi, smiles_list_to_inchi_list
+from conversion.tools import smiles_list_to_inchi_list, smiles_list_to_inchikey_list
 from validation.validate_inchi import validate_inchi
+from validation.validate_with_chembl_webresource import validate_inchikey_list
 from export.export_results import export_results
 
 def extract_molecules_from_url(url, can_choose):
@@ -79,10 +80,12 @@ def extract_molecules_from_url(url, can_choose):
     smiles_list = recognize_segments([segment for filename, segment in segment_list])
 
     inchi_list = smiles_list_to_inchi_list(smiles_list)
+    inchikey_list = smiles_list_to_inchikey_list(smiles_list)
 
     validated_list = validate_inchi(inchi_list)
+    validated_inchi_key_list = validate_inchikey_list(inchikey_list)
 
-    return segment_list, smiles_list, inchi_list, validated_list
+    return segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list
 
 def extract_molecules_of_the_month(target_year):
     """
@@ -97,17 +100,19 @@ def extract_molecules_of_the_month(target_year):
 
     Finally, the function calls the `export_results` function to export the results to a CSV file.
     """
-    segment_list, smiles_list, inchi_list, validated_list = [], [], [], []
+    segment_list, smiles_list, inchi_list, inchikey_list,  validated_list, validated_inchi_key_list = [], [], [], [], [], []
     for index in range(1, 13):
         url = f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}"
-        tmp_segment_list, tmp_smiles_list, tmp_inchi_list, tmp_validated_list = extract_molecules_from_url(url, False)
+        tmp_segment_list, tmp_smiles_list, tmp_inchi_list, tmp_inchikey_list, tmp_validated_list, tmp_validated_inchi_key_list = extract_molecules_from_url(url, False)
         segment_list += tmp_segment_list
         smiles_list += tmp_smiles_list
         inchi_list += tmp_inchi_list
+        inchikey_list += tmp_inchikey_list
         validated_list += tmp_validated_list
+        validated_inchi_key_list += tmp_validated_inchi_key_list
     
     if segment_list and smiles_list and inchi_list and validated_list:
-        export_results(segment_list, smiles_list, inchi_list, validated_list)
+        export_results(segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list)
 
 def extract_molecules(url):
     """
@@ -121,10 +126,10 @@ def extract_molecules(url):
 
     After extracting the molecules, the function calls the `export_results` function to export the results to a CSV file.
     """
-    segment_list, smiles_list, inchi_list, validated_list = extract_molecules_from_url(url, True)
+    segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list = extract_molecules_from_url(url, True)
 
     if segment_list and smiles_list and inchi_list and validated_list:
-        export_results(segment_list, smiles_list, inchi_list, validated_list)
+        export_results(segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list)
 
 
 def main():

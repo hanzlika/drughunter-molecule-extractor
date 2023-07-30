@@ -1,6 +1,6 @@
 import pandas as pd
 
-def export_results(segment_list, smiles_list, inchi_list, validated_list):
+def export_results(segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list):
     """
     Export the segmentation, SMILES, InChI, and validation results to a CSV file.
 
@@ -23,11 +23,13 @@ def export_results(segment_list, smiles_list, inchi_list, validated_list):
     # Create a dictionary with the results
     results = {"source": [filename for filename, _ in segment_list],
                "smiles": smiles_list, 
-               "inchi": inchi_list, 
-               "validated by Unichem": validated_list}
+               "inchi": inchi_list,
+               "inchikey": inchikey_list, 
+               "inchi found in unichem": validated_list,
+               "inchikey found in unichem connectivity": validated_inchi_key_list}
 
     # Create a DataFrame from the results dictionary
     df = pd.DataFrame(results)
 
     # Export the DataFrame to a CSV file
-    df.to_csv('results.csv') 
+    df.to_csv('results_with_validation_comparison.csv') 
