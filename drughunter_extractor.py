@@ -1,16 +1,12 @@
 print("Importing (decimer may take up to a minute to import)")
 
 import argparse
-import requests
+import numpy as np
 from calendar import month_name
-from PIL import Image
-import os
-import pandas as pd
 from pdf_extraction.extract_pdf import download_pdf
 from segmentation.segment_pdf import segment_pdf
-from recognition.recognize_segments import recognize_segments
-from conversion.tools import smiles_list_to_inchi_list, smiles_list_to_inchikey_list
-from validation.validate_inchi import validate_inchi
+from recognition.recognize_segments_molscribe import recognize_segments
+from conversion.tools import smiles_list_to_inchikey_list
 from validation.validate_with_chembl_webresource import validate_inchikey_list
 from export.export_results import export_results
 
@@ -36,16 +32,16 @@ def extract_molecules_from_url(url, can_choose):
 
     The function returns the segment list, SMILES list, InChI list, and validated list as a tuple.
     """
-    pdf_list = []
+    extraction_results = {}
     
     print(f"Attempting to download pdf files from {url}")
 
-    pdf_list += download_pdf(url)
-    print(f"Downloaded {len(pdf_list)} PDF files from {url}.")
-    if not pdf_list:
-        return [], [], [], []
+    pdfs = download_pdf(url)
 
-    for index, (filename, _) in enumerate(pdf_list):
+    if not pdfs:
+        return extraction_results
+
+    for index, (filename, _) in enumerate(pdfs):
         print(f"{index}: {filename}")
 
     # Prompt user to choose a filename
@@ -54,11 +50,11 @@ def extract_molecules_from_url(url, can_choose):
             choice = input("Enter the index of the filename you want to continue with (or 'q' to quit): ")
             if choice.lower() == 'q':
                 print("Quitting...")
-                return [],[],[],[]
+                return extraction_results
             try:
                 index = int(choice)
-                if -1 < index < len(pdf_list):
-                    selected_files = [pdf_list[index]]
+                if -1 < index < len(pdfs):
+                    selected_files = [pdfs[index]]
                     # Continue with the selected file
                     print("Selected file:", selected_files[0][0])
                     break
@@ -67,25 +63,23 @@ def extract_molecules_from_url(url, can_choose):
             except ValueError:
                 print("Invalid input. Please enter a number or 'q' to quit.")
     else:
-        selected_files = pdf_list
+        selected_files = pdfs
 
-    segment_list = []
+    extraction_results['source'] = []
+    segments = []
     for filename, pdf in selected_files:
         print(f"Attempting to segment {filename}")
         result = segment_pdf(pdf)
-        to_append = [(filename, image) for image in result]
-        print(f"Found {len(to_append)} segments in {filename}.")
-        segment_list += to_append
+        tmp_segments = [np.asarray(image) for image in result]
+        print(f"Found {len(tmp_segments)} segments in {filename}.")
+        extraction_results['source'] += [filename] * len(tmp_segments)
+        segments += tmp_segments
     
-    smiles_list = recognize_segments([segment for filename, segment in segment_list])
+    extraction_results.update(recognize_segments(segments))
 
-    inchi_list = smiles_list_to_inchi_list(smiles_list)
-    inchikey_list = smiles_list_to_inchikey_list(smiles_list)
+    extraction_results['validation'] = validate_inchikey_list(extraction_results.get('inchikey'))
 
-    validated_list = validate_inchi(inchi_list)
-    validated_inchi_key_list = validate_inchikey_list(inchikey_list)
-
-    return segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list
+    return extraction_results
 
 def extract_molecules_of_the_month(target_year):
     """
@@ -100,19 +94,19 @@ def extract_molecules_of_the_month(target_year):
 
     Finally, the function calls the `export_results` function to export the results to a CSV file.
     """
-    segment_list, smiles_list, inchi_list, inchikey_list,  validated_list, validated_inchi_key_list = [], [], [], [], [], []
+    extraction_results = {}
     for index in range(1, 13):
         url = f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}"
-        tmp_segment_list, tmp_smiles_list, tmp_inchi_list, tmp_inchikey_list, tmp_validated_list, tmp_validated_inchi_key_list = extract_molecules_from_url(url, False)
-        segment_list += tmp_segment_list
-        smiles_list += tmp_smiles_list
-        inchi_list += tmp_inchi_list
-        inchikey_list += tmp_inchikey_list
-        validated_list += tmp_validated_list
-        validated_inchi_key_list += tmp_validated_inchi_key_list
+        if index == 1:
+            extraction_results = extract_molecules_from_url(url, False)
+        else:
+            tmp_res = extract_molecules_from_url(url, False)
+            for key in tmp_res.keys():
+                extraction_results[key] += tmp_res[key]
+
     
-    if segment_list and smiles_list and inchi_list and validated_list:
-        export_results(segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list)
+    if extraction_results:
+        export_results(extraction_results)
 
 def extract_molecules(url):
     """
@@ -126,10 +120,12 @@ def extract_molecules(url):
 
     After extracting the molecules, the function calls the `export_results` function to export the results to a CSV file.
     """
-    segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list = extract_molecules_from_url(url, True)
+    extraction_results = {}
+    extraction_results.update(extract_molecules_from_url(url, True))
 
-    if segment_list and smiles_list and inchi_list and validated_list:
-        export_results(segment_list, smiles_list, inchi_list, inchikey_list, validated_list, validated_inchi_key_list)
+
+    if extraction_results:
+        export_results(extraction_results)
 
 
 def main():

@@ -10,12 +10,17 @@ def validate_inchikey_list(inchikey_list):
             validation_list.append('False')
     return validation_list
 
+def main ():
 
-input_path = "conversion/converted_inchikey.txt"
-inchikey_list = []
-with open(input_path, 'r') as file:
-    for line in file:
-        inchikey_list.append(line.strip())
+    input_path = "conversion/converted_inchikey.txt"
+    inchikey_list = []
+    with open(input_path, 'r') as file:
+        for line in file:
+            inchikey_list.append(line.strip())
 
 
-print(validate_inchikey_list(inchikey_list))
+    print(validate_inchikey_list(inchikey_list))
+
+
+if __name__ == '__main__':
+    main()
