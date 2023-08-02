@@ -1,29 +1,32 @@
-import pandas as pd
+from pandas import DataFrame
+from os.path import join as osp_join
+from time import strftime
 
-def export_results(to_export):
+def export_to_csv(to_export:dict, file_name:str = "", directory:str = "results"):
     """
-    Export the segmentation, SMILES, InChI, and validation results to a CSV file.
-
     Params:
-    - segment_list (List[Tuple[str, bytes]]): A list of tuples containing the filename and segmented image data.
-    - smiles_list (List[str]): A list of SMILES strings.
-    - inchi_list (List[str]): A list of InChI strings.
-    - validated_list (List[bool]): A list of boolean values indicating the validation status of each InChI.
+        to_export -> dictionary, keys = names of column, values = list of values in columns (ALL VALUE LISTS MUST BE OF THE SAME LENGTH TO CREATE A DATAFRAME)
+        file_name -> optional custom string appended before the timestamp in resulting filename
+        directory -> optional custom target directory, default value = "results" directory
 
-    The function creates a dictionary named `results` with four keys: "source", "smiles", "inchi", and "validated by Unichem".
-    The "source" key corresponds to the filenames extracted from the `segment_list`.
-    The "smiles" key corresponds to the `smiles_list`.
-    The "inchi" key corresponds to the `inchi_list`.
-    The "validated by Unichem" key corresponds to the `validated_list`.
-    
-    The `results` dictionary is then used to create a DataFrame using pandas, and the DataFrame is exported to a CSV file named 'results.csv'.
     """
-    print("Exporting results.")    
+    print("Exporting results.")
 
-    # Create a dictionary with the results
+    df = DataFrame(to_export)
+    df.to_csv(osp_join(directory, file_name + strftime("%Y_%m_%d-%H_%M_%S") + ".csv")) 
 
-    # Create a DataFrame from the results dictionary
-    df = pd.DataFrame(to_export)
+def main():
+    export_to_csv(
+        dict(
+                {
+                'test_column_1':
+                    ['val_1', 'val_2'],
+                'test_column_2':
+                    ['val_1']
+                }
+            ),
+        "test"
+        )
 
-    # Export the DataFrame to a CSV file
-    df.to_csv('results_with_molscribe.csv') 
+if __name__ == '__main__':
+    main()

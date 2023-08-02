@@ -22,6 +22,8 @@ def recognize_segments(image_list):
         }
     """
 
+    print("Recognizing with MolScribe...")
+
     # Necessary
     freeze_support()
 
@@ -29,7 +31,9 @@ def recognize_segments(image_list):
     ckpt_path = hf_hub_download('yujieq/MolScribe', 'swin_base_char_aux_1m.pth')
     model = MolScribe(ckpt_path, device=torch.device('cpu'))
 
-    results_list = model.predict_images(image_list)
+    np_arr_list = [np.asarray(image) for image in image_list]
+
+    results_list = model.predict_images(np_arr_list)
 
     output_dict = {}
     
