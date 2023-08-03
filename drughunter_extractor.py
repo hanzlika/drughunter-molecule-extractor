@@ -34,7 +34,7 @@ def extract_molecules_from_pdfs(pdfs: list[tuple[str, bytes]]) -> None:
 
 
     # segmentation_results -> list of tuples (source filename, segment)
-    segmentation_results = segment_pdf(pdfs, save_to_directory=True, directory="segmentation/segments/2023") 
+    segmentation_results = segment_pdf(pdfs) 
 
     segments = [segment for (_, segment) in segmentation_results]
     extraction_results['source'] = [source for source, _ in segmentation_results]
@@ -67,7 +67,7 @@ def extract_molecules_from_pdfs(pdfs: list[tuple[str, bytes]]) -> None:
     extraction_results.update(recognition_results_molscribe)
 
     if extraction_results:
-        export_to_csv(extraction_results, file_name="with_combined_recognition_")
+        export_to_csv(extraction_results)
 
 
 def extract_molecules_of_the_month(target_year: int) -> None:
@@ -87,7 +87,7 @@ def extract_molecules_of_the_month(target_year: int) -> None:
     """
 
     pdfs = []
-    for index in range(1, 2):
+    for index in range(1, 13):
         url = f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}"
         pdfs += download_pdf(url, download_all=True)
 
@@ -100,53 +100,39 @@ def main():
 
     The function uses the `argparse` module to parse the command-line arguments.
     - If the `url` argument is provided, it calls the `extract_molecules` function with the provided URL.
-    - If the `set` argument is not provided, it prints an error message.
     - If the `year` argument is not provided or is in an invalid format, it prints an error message.
-    - If the `set` is "month", it calls the `extract_molecules_of_the_month` function with the provided year.
-    - If the `set` is "drug", it calls the `extract_approved_drugs` function with the provided year.
-    - If the `set` is not "month" or "drug", it prints an error message.
 
-    Note: The code for the `extract_approved_drugs` function is not provided in the current context.
     """
     parser = ArgumentParser(description='DrugHunter extractor')
-    parser.add_argument('-y', '--year', type=int, help='targeted year of drughunter sets')
-    parser.add_argument('-s', '--set', type=str, help='targeted set (currently supports "month" for drugs of the month and \"drug\" for approval reviews from that year)')
+    parser.add_argument('-y', '--year', type=int, help='targeted year of drughunter molecules of the month set')
     parser.add_argument('-u', '--url', type=str, help='url of webpage with targeted set (in case the format of drughunter url changes, which is likely)')
     args = parser.parse_args()
     
+
+    if args.url and args.year:
+        print("Please use only one option.")
+
     # user requested a specific url to be checked, year and set is ignored
     if args.url:
         extract_molecules_from_pdfs(download_pdf(args.url, download_all=False))
         return
-
-    # user has not picked the set
-    if not args.set:
-        print("No set or url provided")
-        return
     
     # user has not picked the year
     if not args.year:
-        print("No year provided")
+        print("No year or url provided")
         return
 
     if len(str(args.year)) != 4:
         print("Invalid year format. Please provide a 4-digit year (YYYY).")
         return
     
-    if args.set == "month":
-        if (args.year < 2020):
-            print("DrugHunter molecules of the month start at the year 2020, please provide a year equal or greater.")
-            return
-        extract_molecules_of_the_month(args.year)
-        return
 
-    if args.set == "drug":
-        if (args.year < 2019):
-            print("DrugHunter Drug approvals start at the year 2019, please provide a year equal or greater.")
-        extract_approved_drugs(args.year)
+    if (args.year < 2020):
+        print("DrugHunter molecules of the month start at the year 2020, please provide a year equal or greater.")
         return
-
-    print("The set parameter currently supports \"month\" and \"drug\" options, please use one of them, or provide a url to the web page you want pdf extracted from")
+    
+    extract_molecules_of_the_month(args.year)
+    return
 
 if __name__ == "__main__":
     main()
