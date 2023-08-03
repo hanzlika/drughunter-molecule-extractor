@@ -43,9 +43,10 @@ Enter the index of the file name you would like to download.
 Enter 'a' to download all pdf files.
 Enter 'q' to quit.
 ```
-
+ 
+Input:
 ```bash
-2
+$ 2
 ```
 
 ```bash
