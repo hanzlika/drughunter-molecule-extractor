@@ -1,8 +1,9 @@
-from DECIMER import predict_SMILES
-from rdkit import Chem
 import os
 
-def recognize_segments(image_list):
+from rdkit import Chem
+
+
+def recognize_segments(image_list: list) -> dict:
     """
     Iterate through the image list and attempt to recognize each image using DECIMER as a SMILES string.
 
@@ -10,12 +11,18 @@ def recognize_segments(image_list):
     - image_list (List[Image]): A list of images to recognize.
 
     Returns:
-    - List[str]: A list of recognized SMILES strings with matching indexing.
+    - dict: A dictionary containing recognized properties for each image:
+            - "smiles": A list of recognized SMILES strings with matching indexing.
+            - "inchi": A list of recognized InChI strings with matching indexing.
+            - "inchikey": A list of recognized InChIKey strings with matching indexing.
     """
+    print("Importing decimer recognition...")
+    from DECIMER import predict_SMILES
     print("Recognizing with DECIMER V2...")
 
     output_dict = {}
 
+    # Initialize lists to store recognized properties
     output_dict["smiles"] = []
     output_dict["inchi"] = []
     output_dict["inchikey"] = []
@@ -33,10 +40,7 @@ def recognize_segments(image_list):
     if image_list:
         os.remove("tmp.png")
 
-
-    inchi_list = []
-    inchikey_list = []
-
+    # Convert recognized SMILES to InChI and InChIKey
     for smiles in output_dict["smiles"]:
         mol = Chem.MolFromSmiles(smiles)
 
@@ -44,18 +48,22 @@ def recognize_segments(image_list):
             output_dict["inchi"].append(Chem.MolToInchi(mol))
             output_dict["inchikey"].append(Chem.MolToInchiKey(mol))
         else:
+            # If the SMILES cannot be converted to a molecule, store empty strings
             output_dict["inchi"].append("")
             output_dict["inchikey"].append("")
 
     return output_dict
 
 def main():
-    # example use
-    input_list = []
-    smiles_list = recognize_segments(image_list)
+    # Example use:
+    input_list = []  # Replace this with the actual list of images you want to recognize
+    result_dict = recognize_segments(input_list)
 
-    for smiles in smiles_list:
-        print(smiles)
+    # Print the recognized properties for each image
+    for idx, smiles in enumerate(result_dict["smiles"]):
+        inchi = result_dict["inchi"][idx]
+        inchikey = result_dict["inchikey"][idx]
+        print(f"Image {idx + 1}: SMILES={smiles}, InChI={inchi}, InChIKey={inchikey}")
 
 if __name__ == '__main__':
     main()

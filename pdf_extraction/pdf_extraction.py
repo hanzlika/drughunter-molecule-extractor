@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def filter_pdf_links_by_choice(pdf_links:list):
     # print out all filenames to choose from
     for index, pdf_link in enumerate(pdf_links):
@@ -97,8 +98,9 @@ def download_pdf(url:str, download_all:bool = False):
 
 
 def main():
-    from pathlib import Path
     import os
+    from pathlib import Path
+
     # example of use
     # working url
 
