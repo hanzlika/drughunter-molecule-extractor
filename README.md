@@ -15,6 +15,7 @@ The script can also easily be used to extract molecules within pdfs from any pro
 Clone repository and install all the dependencies
 ```bash
 git clone https://github.com/deimos1078/drughunter-molecule-extractor
+cd drughunter-molecule-extractor
 pip install -r requirments.txt
 ```
 
