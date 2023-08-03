@@ -1,4 +1,5 @@
 from DECIMER import predict_SMILES
+from rdkit import Chem
 import os
 
 def recognize_segments(image_list):
@@ -11,8 +12,14 @@ def recognize_segments(image_list):
     Returns:
     - List[str]: A list of recognized SMILES strings with matching indexing.
     """
-    print("Recognizing:")
-    smiles_list = []
+    print("Recognizing with DECIMER V2...")
+
+    output_dict = {}
+
+    output_dict["smiles"] = []
+    output_dict["inchi"] = []
+    output_dict["inchikey"] = []
+
     for img in image_list:
         # Save the image as a temporary file
         img.save("tmp.png")
@@ -20,13 +27,27 @@ def recognize_segments(image_list):
         # Use DECIMER to predict the SMILES string for the image
         # predict_SMILES function requires a path to the image as input
         SMILES = predict_SMILES("tmp.png")
-        smiles_list.append(SMILES)
+        output_dict["smiles"].append(SMILES)
 
     # Remove the temporary image file
     if image_list:
         os.remove("tmp.png")
 
-    return smiles_list
+
+    inchi_list = []
+    inchikey_list = []
+
+    for smiles in output_dict["smiles"]:
+        mol = Chem.MolFromSmiles(smiles)
+
+        if mol:
+            output_dict["inchi"].append(Chem.MolToInchi(mol))
+            output_dict["inchikey"].append(Chem.MolToInchiKey(mol))
+        else:
+            output_dict["inchi"].append("")
+            output_dict["inchikey"].append("")
+
+    return output_dict
 
 def main():
     # example use

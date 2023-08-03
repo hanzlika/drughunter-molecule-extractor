@@ -1,68 +1,93 @@
 from argparse import ArgumentParser
-from numpy import asarray
 from calendar import month_name
-from pdf_extraction.pdf_extraction import download_pdf
-from segmentation.segment_pdf import segment_pdf
-from recognition.recognize_segments_molscribe import recognize_segments
-from conversion.tools import smiles_list_to_inchikey_list
-from validation.validate_with_chembl_webresource import validate_inchikey_list
+
 from export.export_results import export_to_csv
+from pdf_extraction.pdf_extraction import download_pdf
+from recognition.recognize_segments_decimer import \
+    recognize_segments as recognize_segments_decimer
+from recognition.recognize_segments_molscribe import \
+    recognize_segments as recognize_segments_molscribe
+from segmentation.segment_pdf import segment_pdf
+from validation.validate_with_chembl_webresource import validate_inchikey_list
 
-def extract_molecules_from_pdfs(pdfs):
+
+def extract_molecules_from_pdfs(pdfs: list[tuple[str, bytes]]) -> None:
     """
-    Extract molecules from a given URL by downloading PDF files, segmenting them into images,
-    recognizing SMILES strings, converting to InChI strings, and validating the InChI strings.
+    Extracts molecules from a list of PDFs by performing the following steps:
+    1. Downloads PDF files from the specified URLs using the `download_pdf` function.
+    2. Segments the PDFs into images using the `segment_pdf` function.
+    3. Recognizes SMILES strings from the segmented images using the `recognize_segments` function.
+    4. Converts recognized SMILES strings to InChI strings using the `smiles_list_to_inchi_list` function.
+    5. Validates the InChI strings using the `validate_inchi` function.
 
-    Params:
-    - url (str): The URL to download PDF files from.
-    - can_choose (bool): Flag indicating if the user can choose a specific file to continue with.
+    Parameters:
+    - pdfs (List[Tuple[str, bytes]]): A list of tuples containing the source file name and the content of the PDF.
+      Each tuple represents one PDF to be processed.
 
-    Returns:
-    - Tuple[List[Tuple[str, Image]], List[str], List[str], List[bool]]: A tuple containing the segment list,
-      SMILES list, InChI list, and validated list.
+    The function does not return any value, but it saves the results in CSV format to a file named "with_combined_recognition_YYYY_MM_DD-HH_MM_SS.csv",
+    where "YYYY_MM_DD-HH_MM_SS" is the current date and time.
 
-    The function attempts to download PDF files from the specified URL using the `download_pdf` function.
-    It then prompts the user to choose a specific file if `can_choose` is `True`.
-    After selecting the file(s), it segments the PDFs into images using the `segment_pdf` function.
-    Then it recognizes the SMILES strings from the segmented images using the `recognize_segments` function.
-    The recognized SMILES strings are converted to InChI strings using the `smiles_list_to_inchi_list` function.
-    Finally, the InChI strings are validated using the `validate_inchi` function.
-
-    The function returns the segment list, SMILES list, InChI list, and validated list as a tuple.
+    The function also prints the statistics of successful and unsuccessful recognitions using Molscribe and Decimer.
     """
+
     extraction_results = {}
 
 
     # segmentation_results -> list of tuples (source filename, segment)
-    segmentation_results = segment_pdf(pdfs, save_to_directory=True, directory="segmentation/segments") 
+    segmentation_results = segment_pdf(pdfs, save_to_directory=True, directory="segmentation/segments/2023") 
 
     segments = [segment for (_, segment) in segmentation_results]
     extraction_results['source'] = [source for source, _ in segmentation_results]
     
-    extraction_results.update(recognize_segments(segments))
+    recognition_results_molscribe = recognize_segments_molscribe(segments)
+    recognition_results_molscribe['validation'] = validate_inchikey_list(recognition_results_molscribe.get('inchikey'))
 
-    extraction_results['validation'] = validate_inchikey_list(extraction_results.get('inchikey'))
+    index_list = []
+
+    for index, validation_result in enumerate(recognition_results_molscribe['validation']):
+        if validation_result is False:
+            index_list.append(index)
+
+    print(f"Molscribe succesfully recognized {recognition_results_molscribe['validation'].count(True)} segments. \
+          ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
+    print(f"Molscribe could not recognize {recognition_results_molscribe['validation'].count(False)} segments. Attemping to recognize them with decimer")
+
+    recognition_results_decimer = recognize_segments_decimer([segment for index, segment in enumerate(segments) if index in index_list ])
+    recognition_results_decimer['validation'] = validate_inchikey_list(recognition_results_decimer.get('inchikey'))
+
+
+    # complement molscribe unsuccessful recognitions with successful decimer recognitions
+    for index, validation_result in enumerate(recognition_results_decimer['validation']):
+        if validation_result is True:
+            for key in ['smiles', 'inchi', 'inchikey', 'validation']:
+                recognition_results_molscribe[key][index_list[index]] = recognition_results_decimer[key][index]
+    print(f"Decimer managed to recognize {recognition_results_decimer['validation'].count(True)} more segments.")
+    print(f"{recognition_results_molscribe['validation'].count(True)} segments recognized in total. \
+          ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
+    extraction_results.update(recognition_results_molscribe)
 
     if extraction_results:
-        export_to_csv(extraction_results)
+        export_to_csv(extraction_results, file_name="with_combined_recognition_")
 
 
-def extract_molecules_of_the_month(target_year):
+def extract_molecules_of_the_month(target_year: int) -> None:
     """
     Extract molecules of the month for a specific target year.
 
     Params:
     - target_year (int): The target year to extract molecules of the month.
 
-    This function iterates over the months (from index 1 to 13) and constructs the URL for each month
-    using the `target_year`. It then calls the `extract_molecules_from_url` function to extract molecules
-    from each URL. The extracted segment, SMILES, InChI, and validation results are appended to their respective lists.
+    This function iterates over the months (from index 1 to 12) and constructs the URL for each month
+    using the `target_year`. Using download_pdf, it constructs a list of pdfs that the molecules need
+    to be extracted from.
+    It then calls the `extract_molecules_from_pdfs` function to extract molecules
+    from the pdf list. The extracted segment, SMILES, InChI, and validation results are appended to their respective lists.
 
     Finally, the function calls the `export_results` function to export the results to a CSV file.
     """
 
     pdfs = []
-    for index in range(1, 13):
+    for index in range(1, 2):
         url = f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}"
         pdfs += download_pdf(url, download_all=True)
 

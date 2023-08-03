@@ -1,9 +1,10 @@
-# drughunter molecule extractor
- A miniproject focused on creating a script for repeated extraction of molecules and attached text information from pdf files published on https://drughunter.com/, primarily on the sets published on  https://drughunter.com/molecules-of-the-month/ and  https://drughunter.com/resource_category/approved-drug-reviews/ using OCSR.
+# DrugHunter Molecule Extractor
 
- The workflow should consist of these steps: <br />
-	1) PDF extraction <br />
-	2) PDF segmentation using https://github.com/Kohulan/DECIMER-Image-Segmentation/tree/master <br />
-	3) Optical Chemical Structure Recognition (OCSR, most likely with DECIMER) <br />
-	4) Validation through cross-reference with PubChem or UniChem <br />
-	5) Results export as .csv <br />
+The DrugHunter website publishes many high quality datasets. Specifically
+the yearly Drug Approvals (https://drughunter.com/resource_category/approved-drug-reviews/) and monthly Molecules of the Month (https://drughunter.com/molecules-of-the-month/). These sets are well-curated and provide a useful source of validated molecules. Unfortunately
+all the molecules are presented strictly contained within pdf pages - making their extraction into computer-readable format a non-trivial taks.
+
+This library provides the tools that allow the extraction of these molecules from the webpage - either from a provided url,
+or through a workflow that extracts all Molecules of the Month molecules within a given year.
+
+
