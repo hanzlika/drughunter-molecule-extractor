@@ -100,7 +100,7 @@ This is expected behaviour so as long as the script exports results, everything 
 3) Pdfs are downloaded using those links
 4) Pdfs are segmented into individual images using [decimer-image-segmentation](https://github.com/Kohulan/DECIMER-Image-Segmentation/tree/master)
 5) The segments are recognized using [MolScribe](https://github.com/thomas0809/MolScribe)
-6) Inchikeys are gathered form the recognized smiles using [rdkit](https://www.rdkit.org/)
+6) Inchikeys are gathered from the recognized smiles using [rdkit](https://www.rdkit.org/)
 7) Inchikeys are searched for in the [Unichem](https://www.ebi.ac.uk/unichem/) database for connectivity in order to access their validity using [chembl_webresource_client](https://github.com/chembl/chembl_webresource_client)
 8) Segments that were not validated by Unichem are recognized by [Decimer-Image_Transformer](https://github.com/Kohulan/DECIMER-Image_Transformer). This is done because Decimer and MolScribe are good at recognizing different molecules, and because decimer is significantly slower, it is prefferable
 to use it on only a neccessary portion of the segments
