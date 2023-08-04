@@ -11,110 +11,150 @@ from segmentation.segment_pdf import segment_pdf
 from validation.validate_with_chembl_webresource import validate_inchikey_list
 
 
-def extract_molecules_from_pdfs(pdfs: list[tuple[str, bytes]]) -> None:
+def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_directory : str = None) -> None:
     """
-    Extracts molecules from a list of PDFs by performing the following steps:
-    1. Downloads PDF files from the specified URLs using the `download_pdf` function.
-    2. Segments the PDFs into images using the `segment_pdf` function.
-    3. Recognizes SMILES strings from the segmented images using the `recognize_segments` function.
-    4. Converts recognized SMILES strings to InChI strings using the `smiles_list_to_inchi_list` function.
-    5. Validates the InChI strings using the `validate_inchi` function.
+    Extract molecules from a list of PDFs 
 
     Parameters:
     - pdfs (List[Tuple[str, bytes]]): A list of tuples containing the source file name and the content of the PDF.
       Each tuple represents one PDF to be processed.
+    - target_segment_directory (str): Path to the directory that segments segmented with decimer are saved to
 
-    The function does not return any value, but it saves the results in CSV format to a file named "with_combined_recognition_YYYY_MM_DD-HH_MM_SS.csv",
-    where "YYYY_MM_DD-HH_MM_SS" is the current date and time.
-
-    The function also prints the statistics of successful and unsuccessful recognitions using Molscribe and Decimer.
+    Returns:
+    - Nothing, instead saves the results into a timestamped csv file
+    - prints rates of successful and unsuccessful recognitions using Molscribe and Decimer.
     """
 
     extraction_results = {}
 
-
     # segmentation_results -> list of tuples (source filename, segment)
-    segmentation_results = segment_pdf(pdfs) 
+    segmentation_results = segment_pdf(pdfs, target_segment_directory=target_segment_directory) 
 
+    # get segments for recognition
     segments = [segment for (_, segment) in segmentation_results]
+
+    # get source file names for results
     extraction_results['source'] = [source for source, _ in segmentation_results]
     
+    # recognize with Molscribe
     recognition_results_molscribe = recognize_segments_molscribe(segments)
+
+    # validate results with unichem
     recognition_results_molscribe['validation'] = validate_inchikey_list(recognition_results_molscribe.get('inchikey'))
 
-    index_list = []
-
-    for index, validation_result in enumerate(recognition_results_molscribe['validation']):
-        if validation_result is False:
-            index_list.append(index)
-
+    # print rates
     print(f"Molscribe succesfully recognized {recognition_results_molscribe['validation'].count(True)} segments. \
           ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
     print(f"Molscribe could not recognize {recognition_results_molscribe['validation'].count(False)} segments. Attemping to recognize them with decimer")
+   
+    # get indexes of invalidated segments
+    index_list = [index for index, validation_result in enumerate(recognition_results_molscribe['validation']) if validation_result is False]
 
+    # recognize with decimer
     recognition_results_decimer = recognize_segments_decimer([segment for index, segment in enumerate(segments) if index in index_list ])
-    recognition_results_decimer['validation'] = validate_inchikey_list(recognition_results_decimer.get('inchikey'))
 
+    # validate results with unichem
+    recognition_results_decimer['validation'] = validate_inchikey_list(recognition_results_decimer.get('inchikey'))
+    
+    # print rates
+    print(f"Decimer managed to recognize {recognition_results_decimer['validation'].count(True)} more segments.")
+    print(f"{recognition_results_molscribe['validation'].count(True)} segments recognized in total. \
+          ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
 
     # complement molscribe unsuccessful recognitions with successful decimer recognitions
     for index, validation_result in enumerate(recognition_results_decimer['validation']):
         if validation_result is True:
             for key in ['smiles', 'inchi', 'inchikey', 'validation']:
                 recognition_results_molscribe[key][index_list[index]] = recognition_results_decimer[key][index]
-    print(f"Decimer managed to recognize {recognition_results_decimer['validation'].count(True)} more segments.")
-    print(f"{recognition_results_molscribe['validation'].count(True)} segments recognized in total. \
-          ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
+
     extraction_results.update(recognition_results_molscribe)
 
     if extraction_results:
         export_to_csv(extraction_results)
+    else:
+        print("Nothing was extracted.")
 
 
-def extract_molecules_of_the_month(target_year: int) -> None:
+def extract_molecules_of_the_month(target_year : int, 
+                                   target_months : tuple[int, int], 
+                                   target_segment_directory : str = None, 
+                                   target_pdfs_directory : str = None
+                                   ) -> None:
     """
-    Extract molecules of the month for a specific target year.
+    Extract from the Molecules of the Month DrugHunter sets for specified year and month range
 
     Params:
-    - target_year (int): The target year to extract molecules of the month.
+    - target_year (int): Year to extract molecules of the month.
+    - target_months (str): Range of months, format either single number ('5'), or two numbers separated by a dash ('1-3')
+    - target_segment_directory (str): Directory to save segmented pngs to
+    - target_pdfs_directory (str)L Directory to save downloaded pdfs to
 
-    This function iterates over the months (from index 1 to 12) and constructs the URL for each month
-    using the `target_year`. Using download_pdf, it constructs a list of pdfs that the molecules need
-    to be extracted from.
-    It then calls the `extract_molecules_from_pdfs` function to extract molecules
-    from the pdf list. The extracted segment, SMILES, InChI, and validation results are appended to their respective lists.
-
-    Finally, the function calls the `export_results` function to export the results to a CSV file.
+    Returns:
+    - see documentation of extract_molecules_from_pdf
     """
 
-    pdfs = []
-    for index in range(1, 13):
-        url = f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}"
-        pdfs += download_pdf(url, download_all=True)
+    # get list of target urls
+    urls = [f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}" for index in range(target_months[0], target_months[1] + 1)]
+    
+    # get pdfs to extract from
+    pdfs = [download_pdf(url, download_all=True, target_pdfs_directory=target_pdfs_directory) for url in urls]
 
-    extract_molecules_from_pdfs(pdfs)
+    # get chemical info out of pdfs
+    extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory)
+
+
+def extract_bounds(input_string : str) -> tuple[int, int]:
+    """
+    Extract lower and upper bounds out of a string
+
+    Params:
+    - input_string: Range of months, format either single number ('5'), or two numbers separated by a dash ('1-3')
+
+    Returns:
+    - lower_bound: The earliest month in the string
+    - upper_bound: The latest month in the string
+    """
+
+    # if the string is just one number
+    try:
+        if (int(input_string) >= 1 and int(input_string) <= 12):
+            lower_bound, upper_bound = int(input_string), int(input_string)
+            return lower_bound, upper_bound
+        else:
+            raise ValueError("Invalid input format or out-of-range values.")
+    
+    # if the string is two numbers separated by a dash
+    except:
+        try:
+            lower_bound, upper_bound = map(int, input_string.split('-'))
+            if 1 <= lower_bound <= 12 and 1 <= upper_bound <= 12 and lower_bound < upper_bound:
+                return lower_bound, upper_bound
+            else:
+                raise ValueError("Invalid input format or out-of-range values.")
+        except (ValueError, IndexError):
+            raise ValueError("Invalid input format. Please enter two numbers separated by a dash in the range of 1 to 12, with the first being smaller than the latter. Or a single number")
 
 
 def main():
     """
     Main function to handle command-line arguments and execute the appropriate extraction based on the arguments.
-
-    The function uses the `argparse` module to parse the command-line arguments.
-    - If the `url` argument is provided, it calls the `extract_molecules` function with the provided URL.
-    - If the `year` argument is not provided or is in an invalid format, it prints an error message.
-
+    
+    see -h, --help for documentation
     """
     parser = ArgumentParser(description='DrugHunter extractor')
-    parser.add_argument('-y', '--year', type=int, help='targeted year of drughunter molecules of the month set')
-    parser.add_argument('-u', '--url', type=str, help='url of webpage with targeted set (in case the format of drughunter url changes, which is likely)')
+    parser.add_argument('-y', '--year', type=int, help='(int) targeted year of drughunter molecules of the month set')
+    parser.add_argument('-m', '--month', type=str, help='(str) targeted month range of the molecules of the month set, input either two numbers separated by a dash or a single number (borders of the range are included)')
+    parser.add_argument('-u', '--url', type=str, help='(str) url of webpage with targeted set (in case the format of drughunter url changes, which is likely)')
+    parser.add_argument('--seg_dir', type=str, help='(str) directory that the segmented segments will be saved into, if unspecified, segments will not be saved', default=None)
+    parser.add_argument('--pdf_dir', type=str, help='(str) directory that the extracted pdfs will be saved into, if unspectified, will not save any pdfs', default=None)
     args = parser.parse_args()
-    
 
     if args.url and args.year:
         print("Please use only one option.")
 
     # user requested a specific url to be checked, year and set is ignored
     if args.url:
-        extract_molecules_from_pdfs(download_pdf(args.url, download_all=False))
+        extract_molecules_from_pdfs(download_pdf(args.url, download_all=False, target_pdfs_directory=args.pdf_dir), args.seg_dir)
         return
     
     # user has not picked the year
@@ -131,7 +171,11 @@ def main():
         print("DrugHunter molecules of the month start at the year 2020, please provide a year equal or greater.")
         return
     
-    extract_molecules_of_the_month(args.year)
+    if args.month:
+        lower_bound, upper_bound = extract_bounds(args.month)
+    else:
+        lower_bound, upper_bound = 1, 12
+    extract_molecules_of_the_month(args.year, (lower_bound, upper_bound), args.seg_dir, args.pdf_dir)
     return
 
 if __name__ == "__main__":

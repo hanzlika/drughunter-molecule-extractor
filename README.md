@@ -20,7 +20,29 @@ pip install -r requirments.txt
 ```
 
 ## Usage
-The drughunter_extractor.py has two modes
+
+Invoking help:
+```bash
+python3 drughunter_extractor.py -h
+```
+will produce:
+```bash
+usage: drughunter_extractor.py [-h] [-y YEAR] [-m MONTH] [-u URL] [--seg_dir SEG_DIR] [--pdf_dir PDF_DIR]
+
+DrugHunter extractor
+
+options:
+  -h, --help            show this help message and exit
+  -y YEAR, --year YEAR  (int) targeted year of drughunter molecules of the month set
+  -m MONTH, --month MONTH
+                        (str) targeted month range of the molecules of the month set, input either two numbers separated by a dash or a single
+                        number (borders of the range are included)
+  -u URL, --url URL     (str) url of webpage with targeted set (in case the format of drughunter url changes, which is likely)
+  --seg_dir SEG_DIR     (str) directory that the segmented segments will be saved into, if unspecified, segments will not be saved
+  --pdf_dir PDF_DIR     (str) directory that the extracted pdfs will be saved into, if unspectified, will not save any pdfs
+
+```
+
 
 ### Extract from url
 
@@ -47,7 +69,7 @@ Enter 'q' to quit.
  
 Input:
 ```bash
-$ 2
+2
 ```
 
 ```bash
