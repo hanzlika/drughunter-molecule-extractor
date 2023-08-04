@@ -26,7 +26,7 @@ Invoking help:
 python3 drughunter_extractor.py -h
 ```
 will produce:
-```bash
+```text
 usage: drughunter_extractor.py [-h] [-y YEAR] [-m MONTH] [-u URL] [--seg_dir SEG_DIR] [--pdf_dir PDF_DIR]
 
 DrugHunter extractor
@@ -56,7 +56,7 @@ The script will attempt to access the webpage and then proceed to list all links
 You can either select a specific pdf link or download all of them for the proceeding extraction
 
 
-```bash
+```text
 Attempting to download pdf files from https://drughunter.com/resource/2022-drug-approvals/
 0: DH-2022-Small-Drug-Approvals-v3.pdf
 1: DH-2022-Large-Drug-Approvals-_R1.pdf
@@ -72,7 +72,7 @@ Input:
 2
 ```
 
-```bash
+```text
 Selected file: EC-edits_DH-2022-First-in-Class-Small-Molecules-R1..pdf
 EC-edits_DH-2022-First-in-Class-Small-Molecules-R1..pdf downloaded successfully.
 ```
