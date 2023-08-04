@@ -84,14 +84,27 @@ The results will be exported into a csv in the results directory.
 
 -y, --year Specify the year that the Molecules of the Month sets you're targeting were published in
 
-Just specify a year and the script will do the rest (coffee time)
-
 ```bash
 python3 drughunter_extractor.py --year 2023
 ```
 
 Please note that at the time of writing both Decimer and MolScribe generate quite a bit of warnings.
 This is expected behaviour so as long as the script exports results, everything is working as intended.
+
+### Extract Molcules of the Month within a specified month range
+
+-m, --month Specify the range of months that the Molecules of the Month sets you're targeting were published in
+
+
+Ex. I want to download all sets published between February(2) and September(9) of 2022
+```bash
+python3 drughunter_extractor.py --year 2022 --month 2-9
+```
+
+Ex. I want to download the May 2023 set
+```bash
+python3 drughunter_extractor.py --year 2022 --month 5
+```
 
 ## Workflow and used libraries
 
