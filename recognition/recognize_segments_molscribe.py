@@ -2,12 +2,11 @@ import os
 from multiprocessing import freeze_support
 
 import numpy as np
-import torch
-from huggingface_hub import hf_hub_download
-from molscribe import MolScribe
 from PIL import Image
 from rdkit import Chem
-
+from time import time
+import torch
+from huggingface_hub import hf_hub_download
 
 def recognize_segments(image_list: list) -> dict:
     """
@@ -24,8 +23,13 @@ def recognize_segments(image_list: list) -> dict:
                 'inchikey': [inchikey_1, inchikey_2, ...]
             }
     """
+    print("Importing MolScribe...")
+    import_start = time()
+    from molscribe import MolScribe
+    print(f"Importing took: {time() - import_start} s")
 
     print("Recognizing with MolScribe...")
+    recognition_start = time()
 
     # Necessary for Windows compatibility with multiprocessing
     freeze_support()
@@ -57,6 +61,7 @@ def recognize_segments(image_list: list) -> dict:
             output_dict['inchi'].append("")
             output_dict['inchikey'].append("")
 
+    print(f"Recognition of {len(image_list)} segments with MolScribe took: {time() - recognition_start} s\n({(time() - recognition_start)/len(image_list)} s per segment)")
     return output_dict
 
 

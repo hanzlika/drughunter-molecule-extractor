@@ -1,6 +1,7 @@
 import os
 
 from rdkit import Chem
+from time import time
 
 
 def recognize_segments(image_list: list) -> dict:
@@ -17,9 +18,12 @@ def recognize_segments(image_list: list) -> dict:
             - "inchikey": A list of recognized InChIKey strings with matching indexing.
     """
     print("Importing decimer recognition...")
+    import_start = time()
     from DECIMER import predict_SMILES
-    print("Recognizing with DECIMER V2...")
+    print(f"Importing took:{time() - import_start} s")
 
+    print("Recognizing with DECIMER V2...")
+    recognition_start = time()
     output_dict = {}
 
     # Initialize lists to store recognized properties
@@ -51,7 +55,8 @@ def recognize_segments(image_list: list) -> dict:
             # If the SMILES cannot be converted to a molecule, store empty strings
             output_dict["inchi"].append("")
             output_dict["inchikey"].append("")
-
+    
+    print(f"Recognition of {len(image_list)} segments with Decimer took: {time() - recognition_start} s\n({(time() - recognition_start)/len(image_list)} s per segment)")
     return output_dict
 
 def main():

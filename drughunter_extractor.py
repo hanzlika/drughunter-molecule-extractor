@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from calendar import month_name
 
+
 from export.export_results import export_to_csv
 from pdf_extraction.pdf_extraction import download_pdf
 from recognition.recognize_segments_decimer import \
@@ -9,7 +10,7 @@ from recognition.recognize_segments_molscribe import \
     recognize_segments as recognize_segments_molscribe
 from segmentation.segment_pdf import segment_pdf
 from validation.validate_with_chembl_webresource import validate_inchikey_list
-
+from export.remove_duplicates import remove_duplicates
 
 def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_directory : str = None) -> None:
     """
@@ -45,7 +46,7 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_d
     # print rates
     print(f"Molscribe succesfully recognized {recognition_results_molscribe['validation'].count(True)} segments. \
           ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
-    print(f"Molscribe could not recognize {recognition_results_molscribe['validation'].count(False)} segments. Attemping to recognize them with decimer")
+    print(f"Molscribe could not recognize {recognition_results_molscribe['validation'].count(False)} segments. Attemping to recognize them with decimer.")
    
     # get indexes of invalidated segments
     index_list = [index for index, validation_result in enumerate(recognition_results_molscribe['validation']) if validation_result is False]
@@ -53,13 +54,10 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_d
     # recognize with decimer
     recognition_results_decimer = recognize_segments_decimer([segment for index, segment in enumerate(segments) if index in index_list ])
 
+
     # validate results with unichem
     recognition_results_decimer['validation'] = validate_inchikey_list(recognition_results_decimer.get('inchikey'))
-    
-    # print rates
     print(f"Decimer managed to recognize {recognition_results_decimer['validation'].count(True)} more segments.")
-    print(f"{recognition_results_molscribe['validation'].count(True)} segments recognized in total. \
-          ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
 
     # complement molscribe unsuccessful recognitions with successful decimer recognitions
     for index, validation_result in enumerate(recognition_results_decimer['validation']):
@@ -67,8 +65,14 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_d
             for key in ['smiles', 'inchi', 'inchikey', 'validation']:
                 recognition_results_molscribe[key][index_list[index]] = recognition_results_decimer[key][index]
 
+    # update and remove duplicates
     extraction_results.update(recognition_results_molscribe)
+    extraction_results = remove_duplicates(extraction_results)
 
+    # print rates
+    print(f"{extraction_results['validation'].count(True)} segments recognized in total. \
+          ({round(extraction_results['validation'].count(True)/len(extraction_results['validation'])*100, 2)} % success rate)")
+    
     if extraction_results:
         export_to_csv(extraction_results)
     else:
@@ -97,7 +101,10 @@ def extract_molecules_of_the_month(target_year : int,
     urls = [f"https://drughunter.com/molecules-of-the-month/{target_year}/{month_name[index].lower()}-{target_year}" for index in range(target_months[0], target_months[1] + 1)]
     
     # get pdfs to extract from
-    pdfs = [download_pdf(url, download_all=True, target_pdfs_directory=target_pdfs_directory) for url in urls]
+    pdfs = []
+    for url in urls:
+        pdfs += download_pdf(url, download_all=True, target_pdfs_directory=target_pdfs_directory) 
+    
 
     # get chemical info out of pdfs
     extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory)

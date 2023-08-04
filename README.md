@@ -118,5 +118,6 @@ python3 drughunter_extractor.py --year 2022 --month 5
 8) Segments that were not validated by Unichem are recognized by [Decimer-Image_Transformer](https://github.com/Kohulan/DECIMER-Image_Transformer). This is done because Decimer and MolScribe are good at recognizing different molecules, and because decimer is significantly slower, it is prefferable
 to use it on only a neccessary portion of the segments
 9) Validation again
-10) The results are exported into a csv file using [pandas dataframe](https://pandas.pydata.org/), containing the source pdf file name, recognized smiles, inchi, inchikey and whether the inchikey was validated or not
+10) The results are filtered so that no duplicate inchikeys are present
+11) The results are exported into a csv file using [pandas dataframe](https://pandas.pydata.org/), containing the source pdf file name, recognized smiles, inchi, inchikey and whether the inchikey was validated or not
 

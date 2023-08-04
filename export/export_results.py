@@ -13,7 +13,7 @@ def export_to_csv(to_export: dict, file_name: str = "", directory: str = "result
         directory (str): Optional custom target directory. The default value is "results" directory.
 
     """
-    print("Exporting results.")
+    print("Exporting results...")
 
     df = DataFrame(to_export)
     # Create a CSV file in the specified directory with the given file name and timestamp

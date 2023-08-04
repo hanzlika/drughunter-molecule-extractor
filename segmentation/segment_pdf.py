@@ -2,7 +2,7 @@ import os
 import numpy as np
 from pdf2image import convert_from_bytes
 from PIL import Image
-
+from time import time
 
 def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand: bool = True, visualization: bool = False) -> list[tuple]:
     """
@@ -17,7 +17,13 @@ def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand
     Returns:
         list[tuple]: A list of tuples containing the filename and segmented images extracted from the PDF.
     """
+    print("Importing decimer segmentation...")
+    import_start = time()
     from decimer_segmentation import segment_chemical_structures
+    print(f"Importing decimer took: {time() - import_start} s")
+
+    print("Segmenting...")
+    segmentation_start = time()
     
     # prep saving directory
     if target_segment_directory:
@@ -46,16 +52,18 @@ def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand
             for segment in segments:
                 image = Image.fromarray(segment)
                 sub_segment_list.append((filename, image))
-        print(f"Found {len(sub_segment_list)} segments in {filename}.")
+        print(f"Found {len(sub_segment_list)} segments in {filename}")
 
         # save to specified directory
         if target_segment_directory:
             os.makedirs(os.path.join(target_segment_directory, filename), exist_ok=True)
             for index, (filename, segment) in enumerate(sub_segment_list):
                 segment.save(os.path.join(target_segment_directory, f"{filename}/{index}.png"))
-            print(f"Segments from {filename} saved into {target_segment_directory}/{filename}.")
+            print(f"Segments from {filename} saved into {target_segment_directory}/{filename}")
         segment_list += sub_segment_list
 
+
+    print(f"{len(segment_list)} segments were segmented.\nSegmentation took {time() - segmentation_start} s\n({(time() - segmentation_start)/len(segment_list)} s per segment)")
     return segment_list
 
 def main(): 

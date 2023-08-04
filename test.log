@@ -1,44 +1,70 @@
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/january-2023
-DH-MOTM-Poster-Jan2023-1.pdf downloaded successfully.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/february-2023
-DH-MOTM-Poster-Feb2023.pdf downloaded successfully.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/march-2023
-DH-MOTM-Poster-March2023.pdf downloaded successfully.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/april-2023
-DH-MOTM-Poster-April-2023.pdf downloaded successfully.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/may-2023
-DH-MOTM-Poster-May2023.pdf downloaded successfully.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/june-2023
-DH-MOTM-Poster-June-2023-Revised.pdf downloaded successfully.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/july-2023
-Failed to download the web page.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/august-2023
-Failed to download the web page.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/september-2023
-Failed to download the web page.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/october-2023
-Failed to download the web page.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/november-2023
-Failed to download the web page.
-Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2023/december-2023
-Failed to download the web page.
-Attempting to segment DH-MOTM-Poster-Jan2023-1.pdf
-Found 10 segments in DH-MOTM-Poster-Jan2023-1.pdf.
-Attempting to segment DH-MOTM-Poster-Feb2023.pdf
-Found 10 segments in DH-MOTM-Poster-Feb2023.pdf.
-Attempting to segment DH-MOTM-Poster-March2023.pdf
-Found 10 segments in DH-MOTM-Poster-March2023.pdf.
-Attempting to segment DH-MOTM-Poster-April-2023.pdf
-Found 10 segments in DH-MOTM-Poster-April-2023.pdf.
-Attempting to segment DH-MOTM-Poster-May2023.pdf
-Found 10 segments in DH-MOTM-Poster-May2023.pdf.
-Attempting to segment DH-MOTM-Poster-June-2023-Revised.pdf
-Found 9 segments in DH-MOTM-Poster-June-2023-Revised.pdf.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/january-2022
+4-MOTM-Infographic-PDF-Summaries-Tables-for-Download.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/february-2022
+6-MOTM-Infographic-FEBRUARY.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/march-2022
+MOTM-Infographic-MARCH-2022-v2.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/april-2022
+MOTM-Infographic-April-2022-1.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/may-2022
+MOTM-Infographic-MAY.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/june-2022
+MOTM-Infographic-JUNE.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/july-2022
+MOTM-Infographic-JULY.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/august-2022
+MOTM-Infographic-August-2022.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/september-2022
+MOTM-Infographic-September-2022.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/october-2022
+MOTM-Infographic-October-2022-1.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/november-2022
+DH-MOTM-Poster-November-2022-R4.pdf downloaded successfully.
+Attempting to download pdf files from https://drughunter.com/molecules-of-the-month/2022/december-2022
+DH-MOTM-Poster-December-2022-R4.pdf downloaded successfully.
+Importing decimer segmentation...
+Importing decimer took:6.837880849838257 s
+Segmenting:
+Attempting to segment 4-MOTM-Infographic-PDF-Summaries-Tables-for-Download.pdf
+Found 10 segments in 4-MOTM-Infographic-PDF-Summaries-Tables-for-Download.pdf.
+Attempting to segment 6-MOTM-Infographic-FEBRUARY.pdf
+Found 10 segments in 6-MOTM-Infographic-FEBRUARY.pdf.
+Attempting to segment MOTM-Infographic-MARCH-2022-v2.pdf
+Found 10 segments in MOTM-Infographic-MARCH-2022-v2.pdf.
+Attempting to segment MOTM-Infographic-April-2022-1.pdf
+Found 10 segments in MOTM-Infographic-April-2022-1.pdf.
+Attempting to segment MOTM-Infographic-MAY.pdf
+Found 11 segments in MOTM-Infographic-MAY.pdf.
+Attempting to segment MOTM-Infographic-JUNE.pdf
+Found 11 segments in MOTM-Infographic-JUNE.pdf.
+Attempting to segment MOTM-Infographic-JULY.pdf
+Found 10 segments in MOTM-Infographic-JULY.pdf.
+Attempting to segment MOTM-Infographic-August-2022.pdf
+Found 10 segments in MOTM-Infographic-August-2022.pdf.
+Attempting to segment MOTM-Infographic-September-2022.pdf
+Found 8 segments in MOTM-Infographic-September-2022.pdf.
+Attempting to segment MOTM-Infographic-October-2022-1.pdf
+Found 9 segments in MOTM-Infographic-October-2022-1.pdf.
+Attempting to segment DH-MOTM-Poster-November-2022-R4.pdf
+Found 10 segments in DH-MOTM-Poster-November-2022-R4.pdf.
+Attempting to segment DH-MOTM-Poster-December-2022-R4.pdf
+Found 11 segments in DH-MOTM-Poster-December-2022-R4.pdf.
+120 segments were segmented.
+Segmentation took 185.33036136627197 s.
+(1.5444197277228038 s per segment)
+Importing MolScribe...
+Importing took: 0.3882782459259033 s
 Recognizing with MolScribe...
-Molscribe succesfully recognized 44 segments.           (74.58 % success rate)
-Molscribe could not recognize 15 segments. Attemping to recognize them with decimer
+Recognition of with MolScribe took: 96.5371413230896
+0.8044763088226319 s per segment
+Molscribe succesfully recognized 89 segments.           (74.17 % success rate)
+Molscribe could not recognize 31 segments. Attemping to recognize them with decimer
 Importing decimer recognition...
+Importing took:26.298176527023315 s
 Recognizing with DECIMER V2...
-Decimer managed to recognize 6 more segments.
-50 segments recognized in total.           (84.75 % success rate)
+Recognition of with Decimer took: 125.94280672073364
+4.062671384503765 s per segment
+Decimer managed to recognize 9 more segments.
+7 rows were removed due to being duplicates of previous rows
+96 segments recognized in total.           (84.96 % success rate)
 Exporting results.
