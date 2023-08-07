@@ -12,7 +12,11 @@ from segmentation.segment_pdf import segment_pdf
 from validation.validate_with_chembl_webresource import validate_inchikey_list
 from export.remove_duplicates import remove_duplicates
 
-def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_directory : str = None) -> None:
+def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], 
+                                target_segment_directory : str = None, 
+                                decimer_complement : bool = True,
+                                get_text : bool = False
+                                ) -> None:
     """
     Extract molecules from a list of PDFs 
 
@@ -29,13 +33,15 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_d
     extraction_results = {}
 
     # segmentation_results -> list of tuples (source filename, segment)
-    segmentation_results = segment_pdf(pdfs, target_segment_directory=target_segment_directory) 
+    segmentation_results, text_list = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text) 
 
     # get segments for recognition
     segments = [segment for (_, segment) in segmentation_results]
 
     # get source file names for results
     extraction_results['source'] = [source for source, _ in segmentation_results]
+    if (text_list):
+        extraction_results['text'] = [text for text in text_list]
     
     # recognize with Molscribe
     recognition_results_molscribe = recognize_segments_molscribe(segments)
@@ -48,22 +54,23 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_d
           ({round(recognition_results_molscribe['validation'].count(True)/len(recognition_results_molscribe['validation'])*100, 2)} % success rate)")
     print(f"Molscribe could not recognize {recognition_results_molscribe['validation'].count(False)} segments. Attemping to recognize them with decimer.")
    
-    # get indexes of invalidated segments
-    index_list = [index for index, validation_result in enumerate(recognition_results_molscribe['validation']) if validation_result is False]
+    if decimer_complement:
+        # get indexes of invalidated segments
+        index_list = [index for index, validation_result in enumerate(recognition_results_molscribe['validation']) if validation_result is False]
 
-    # recognize with decimer
-    recognition_results_decimer = recognize_segments_decimer([segment for index, segment in enumerate(segments) if index in index_list ])
+        # recognize with decimer
+        recognition_results_decimer = recognize_segments_decimer([segment for index, segment in enumerate(segments) if index in index_list ])
 
 
-    # validate results with unichem
-    recognition_results_decimer['validation'] = validate_inchikey_list(recognition_results_decimer.get('inchikey'))
-    print(f"Decimer managed to recognize {recognition_results_decimer['validation'].count(True)} more segments.")
+        # validate results with unichem
+        recognition_results_decimer['validation'] = validate_inchikey_list(recognition_results_decimer.get('inchikey'))
+        print(f"Decimer managed to recognize {recognition_results_decimer['validation'].count(True)} more segments.")
 
-    # complement molscribe unsuccessful recognitions with successful decimer recognitions
-    for index, validation_result in enumerate(recognition_results_decimer['validation']):
-        if validation_result is True:
-            for key in ['smiles', 'inchi', 'inchikey', 'validation']:
-                recognition_results_molscribe[key][index_list[index]] = recognition_results_decimer[key][index]
+        # complement molscribe unsuccessful recognitions with successful decimer recognitions
+        for index, validation_result in enumerate(recognition_results_decimer['validation']):
+            if validation_result is True:
+                for key in ['smiles', 'inchi', 'inchikey', 'validation']:
+                    recognition_results_molscribe[key][index_list[index]] = recognition_results_decimer[key][index]
 
     # update and remove duplicates
     extraction_results.update(recognition_results_molscribe)
@@ -82,7 +89,7 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], target_segment_d
 def extract_molecules_of_the_month(target_year : int, 
                                    target_months : tuple[int, int], 
                                    target_segment_directory : str = None, 
-                                   target_pdfs_directory : str = None
+                                   decimer_complement : bool = True
                                    ) -> None:
     """
     Extract from the Molecules of the Month DrugHunter sets for specified year and month range
@@ -91,7 +98,6 @@ def extract_molecules_of_the_month(target_year : int,
     - target_year (int): Year to extract molecules of the month.
     - target_months (str): Range of months, format either single number ('5'), or two numbers separated by a dash ('1-3')
     - target_segment_directory (str): Directory to save segmented pngs to
-    - target_pdfs_directory (str)L Directory to save downloaded pdfs to
 
     Returns:
     - see documentation of extract_molecules_from_pdf
@@ -103,11 +109,11 @@ def extract_molecules_of_the_month(target_year : int,
     # get pdfs to extract from
     pdfs = []
     for url in urls:
-        pdfs += download_pdf(url, download_all=True, target_pdfs_directory=target_pdfs_directory) 
+        pdfs += download_pdf(url, download_all=True) 
     
 
     # get chemical info out of pdfs
-    extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory)
+    extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory, decimer_complement=decimer_complement, get_text=True)
 
 
 def extract_bounds(input_string : str) -> tuple[int, int]:
@@ -153,15 +159,19 @@ def main():
     parser.add_argument('-m', '--month', type=str, help='(str) targeted month range of the molecules of the month set, input either two numbers separated by a dash or a single number (borders of the range are included)')
     parser.add_argument('-u', '--url', type=str, help='(str) url of webpage with targeted set (in case the format of drughunter url changes, which is likely)')
     parser.add_argument('--seg_dir', type=str, help='(str) directory that the segmented segments will be saved into, if unspecified, segments will not be saved', default=None)
-    parser.add_argument('--pdf_dir', type=str, help='(str) directory that the extracted pdfs will be saved into, if unspectified, will not save any pdfs', default=None)
+    parser.add_argument('--decimer_off', help='Turns off decimer complementation', action='store_true')
     args = parser.parse_args()
+
+    
+    decimer_on = not args.decimer_off
+
 
     if args.url and args.year:
         print("Please use only one option.")
 
     # user requested a specific url to be checked, year and set is ignored
     if args.url:
-        extract_molecules_from_pdfs(download_pdf(args.url, download_all=False, target_pdfs_directory=args.pdf_dir), args.seg_dir)
+        extract_molecules_from_pdfs(download_pdf(args.url, download_all=False), target_segment_directory=args.seg_dir, decimer_complement=decimer_on)
         return
     
     # user has not picked the year
@@ -182,7 +192,7 @@ def main():
         lower_bound, upper_bound = extract_bounds(args.month)
     else:
         lower_bound, upper_bound = 1, 12
-    extract_molecules_of_the_month(args.year, (lower_bound, upper_bound), args.seg_dir, args.pdf_dir)
+    extract_molecules_of_the_month(args.year, (lower_bound, upper_bound), args.seg_dir, decimer_complement=decimer_on)
     return
 
 if __name__ == "__main__":

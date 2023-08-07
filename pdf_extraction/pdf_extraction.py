@@ -48,7 +48,7 @@ Enter 'q' to quit.")
 
     return pdf_links 
 
-def download_pdf(url : str, download_all : bool = False, target_pdfs_directory : str = None) -> list:
+def download_pdf(url : str, download_all : bool = False, target_pdfs_directory : str = 'pdf_extraction/pdfs') -> list:
     """
     Attempts to download PDF files from a given URL.
 

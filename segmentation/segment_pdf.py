@@ -3,8 +3,14 @@ import numpy as np
 from pdf2image import convert_from_bytes
 from PIL import Image
 from time import time
+from segmentation.extract_text import extract_text
 
-def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand: bool = True, visualization: bool = False) -> list[tuple]:
+def segment_pdf(pdfs : list[tuple],  
+                target_segment_directory : str = None, 
+                expand:  bool = True, 
+                visualization : bool = False,
+                get_text : bool = False
+                ) -> list[tuple]:
     """
     Segment chemical structures from PDF pages using the decimer_segmentation library.
 
@@ -31,6 +37,7 @@ def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand
 
     # segmentation
     segment_list = []
+    text_list = []
     for (filename, content) in pdfs:
 
         # process pdfs
@@ -46,12 +53,17 @@ def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand
         sub_segment_list = []
         print(f"Attempting to segment {filename}")
         for page in pages:
-            segments = segment_chemical_structures(np.array(page),
+            segments, bboxes = segment_chemical_structures(np.array(page),
                                                    expand=expand,
                                                    visualization=visualization)
-            for segment in segments:
+            for index, segment in enumerate(segments):
                 image = Image.fromarray(segment)
                 sub_segment_list.append((filename, image))
+                if get_text:
+                    text_list.append(extract_text(os.path.join('pdf_extraction/pdfs', filename), bboxes[index]))
+
+
+
         print(f"Found {len(sub_segment_list)} segments in {filename}")
 
         # save to specified directory
@@ -64,14 +76,14 @@ def segment_pdf(pdfs: list[tuple],  target_segment_directory: str = None, expand
 
 
     print(f"{len(segment_list)} segments were segmented.\nSegmentation took {time() - segmentation_start} s\n({(time() - segmentation_start)/len(segment_list)} s per segment)")
-    return segment_list
+    return segment_list, text_list
 
 def main(): 
     # example use:
-    filename = "2020-MOTM-April.pdf"
-    filepath = "pdf_extraction/pdfs/2020-MOTM-April.pdf"
+    filepath = "pdf_extraction/pdfs/DH-MOTM-Poster-June-2023-Revised.pdf"
     with open(filepath, "rb") as f:
-        result = segment_pdf([(filename, f.read())], save_to_directory=True, directory="segmentation/segments/experiments", expand=True)
+        _, text = segment_pdf([("DH-MOTM-Poster-June-2023-Revised.pdf", f.read())], target_segment_directory="segmentation/segments/experiments", expand=True)
+        print("\n->".join(text))
 
 if __name__ == '__main__':
     main()

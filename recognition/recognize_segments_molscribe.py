@@ -7,6 +7,7 @@ from rdkit import Chem
 from time import time
 import torch
 from huggingface_hub import hf_hub_download
+from chembl_structure_pipeline import standardizer
 
 def recognize_segments(image_list: list) -> dict:
     """

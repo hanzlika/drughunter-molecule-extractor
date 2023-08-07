@@ -20,7 +20,7 @@ def recognize_segments(image_list: list) -> dict:
     print("Importing decimer recognition...")
     import_start = time()
     from DECIMER import predict_SMILES
-    print(f"Importing took:{time() - import_start} s")
+    print(f"Importing took: {time() - import_start} s")
 
     print("Recognizing with DECIMER V2...")
     recognition_start = time()

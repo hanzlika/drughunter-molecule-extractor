@@ -15,7 +15,8 @@ def remove_duplicates(dict_with_duplicates : dict) -> dict:
         if inchikey not in inchikeys:
             for key in dict_without_duplicates.keys():
                 dict_without_duplicates.get(key).append((dict_with_duplicates.get(key))[index])
-            inchikeys.add(inchikey)
+            if inchikey:
+                inchikeys.add(inchikey)
         else:
             removed_count += 1
     print(f"{removed_count} rows were removed due to being duplicates of previous rows")

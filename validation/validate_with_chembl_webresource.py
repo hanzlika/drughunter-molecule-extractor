@@ -1,6 +1,7 @@
 from chembl_webresource_client.unichem import unichem_client as unichem
 
 def validate_inchikey_list(inchikey_list : list[str]) -> list[bool]:
+    print("Validating through unichem.connectivity()...")
     """
     Validate a list of InChIKeys using the UniChem web service.
 
@@ -13,7 +14,7 @@ def validate_inchikey_list(inchikey_list : list[str]) -> list[bool]:
     validation_list = []
     for inchikey in inchikey_list:
         try:
-            ret = unichem.connectivity(inchikey)
+            unichem.connectivity(inchikey)
             validation_list.append(True)
         except:
             validation_list.append(False)
