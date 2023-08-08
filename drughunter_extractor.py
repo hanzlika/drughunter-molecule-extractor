@@ -12,41 +12,6 @@ from segmentation.segment_pdf import segment_pdf
 from validation.validate_with_chembl_webresource import validate_inchikey_list
 from export.remove_duplicates import remove_duplicates
 
-def get_information_from_descriptions(descriptions : list[str]) -> dict:
-    """
-    Attempt to parse information out of a list of descriptions.
-
-    The first line of drughunter descriptions often contains a '|' character
-    that splits the line into NAME and TARGET
-    If it does not contain the '|' character, it is common that the NAME is contained
-    within the first line and TARGET within the second line
-    
-    In: 
-        - descriptions -> list of individual descriptions, commonly they contain lines separated by '\n'
-    Out:
-        - dict with keys ['description', 'proposed_name', 'proposed_target'] that points towards equally long lists
-
-    TODO?:
-    Occassionally the text extraction module puts the name and target on last two lines
-    It could be possible to handle that to increase correct name, target proposal rate
-    """
-    information = {}
-    information['description'] = [description for description in descriptions]
-    information['proposed_name'] = []
-    information['proposed_target'] = []
-    for description in descriptions:
-        description_list = description.split('\n')
-        if '|' in description_list[0]:
-            proposed_name, proposed_target = description_list[0].split('|')
-        elif len(descriptions) >= 2:
-            proposed_name, proposed_target = description_list[0], description_list[1]
-        else:
-            proposed_name, proposed_target = "", ""
-        information['proposed_name'].append(proposed_name)
-        information['proposed_target'].append(proposed_target)
-    return information
-
-
 def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], 
                                 target_segment_directory : str = None, 
                                 decimer_complement : bool = True,
