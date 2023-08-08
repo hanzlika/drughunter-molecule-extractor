@@ -28,7 +28,7 @@ def segment_pdf(pdfs : list[tuple],
     """
     print("Importing decimer segmentation...")
     import_start = time()
-    from segmentation.DECIMER_Image_Segmentation_for_Drug_Hunter import segment_chemical_structures
+    from segmentation.DECIMER_Image_Segmentation_for_Drug_Hunter.decimer_segmentation import segment_chemical_structures
     print(f"Importing decimer took: {time() - import_start} s")
 
     print("Segmenting...")
