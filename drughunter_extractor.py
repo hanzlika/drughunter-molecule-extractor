@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
 from calendar import month_name
 
-
 from export.export_results import export_to_csv
+from export.remove_duplicates import remove_duplicates
 from pdf_extraction.pdf_extraction import download_pdf
 from recognition.recognize_segments_decimer import \
     recognize_segments as recognize_segments_decimer
@@ -10,7 +10,42 @@ from recognition.recognize_segments_molscribe import \
     recognize_segments as recognize_segments_molscribe
 from segmentation.segment_pdf import segment_pdf
 from validation.validate_with_chembl_webresource import validate_inchikey_list
-from export.remove_duplicates import remove_duplicates
+
+
+def get_information_from_descriptions(descriptions : list[str]) -> dict:
+    """
+    Attempt to parse information out of a list of descriptions.
+
+    The first line of drughunter descriptions often contains a '|' character
+    that splits the line into NAME and TARGET
+    If it does not contain the '|' character, it is common that the NAME is contained
+    within the first line and TARGET within the second line
+    
+    In: 
+        - descriptions -> list of individual descriptions, commonly they contain lines separated by '\n'
+    Out:
+        - dict with keys ['description', 'proposed_name', 'proposed_target'] that points towards equally long lists
+
+    TODO?:
+    Occassionally the text extraction module puts the name and target on last two lines
+    It could be possible to handle that to increase correct name, target proposal rate
+    """
+    information = {}
+    information['description'] = [description for description in descriptions]
+    information['proposed_name'] = []
+    information['proposed_target'] = []
+    for description in descriptions:
+        description_list = description.split('\n')
+        if '|' in description_list[0]:
+            proposed_name, proposed_target = description_list[0].split('|')
+        elif len(descriptions) >= 2:
+            proposed_name, proposed_target = description_list[0], description_list[1]
+        else:
+            proposed_name, proposed_target = "", ""
+        information['proposed_name'].append(proposed_name)
+        information['proposed_target'].append(proposed_target)
+    return information
+
 
 def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], 
                                 target_segment_directory : str = None, 
@@ -36,7 +71,7 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]],
     segmentation_results, descriptions = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text) 
 
     # get segments for recognition
-    segments = [segment for (_, _, segment) in segmentation_results]
+    segments = [segment for (_, _, segment,) in segmentation_results]
 
     # get source file names for results
     extraction_results['source'] = [source for source, _, _ in segmentation_results]
@@ -91,7 +126,8 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]],
 def extract_molecules_of_the_month(target_year : int, 
                                    target_months : tuple[int, int], 
                                    target_segment_directory : str = None, 
-                                   decimer_complement : bool = True
+                                   decimer_complement : bool = True,
+                                   get_text : bool = False
                                    ) -> None:
     """
     Extract from the Molecules of the Month DrugHunter sets for specified year and month range
@@ -115,7 +151,8 @@ def extract_molecules_of_the_month(target_year : int,
     
 
     # get chemical info out of pdfs
-    extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory, decimer_complement=decimer_complement, get_text=True)
+    if pdfs:
+        extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory, decimer_complement=decimer_complement, get_text=get_text)
 
 
 def extract_bounds(input_string : str) -> tuple[int, int]:
@@ -162,18 +199,23 @@ def main():
     parser.add_argument('-u', '--url', type=str, help='(str) url of webpage with targeted set (in case the format of drughunter url changes, which is likely)')
     parser.add_argument('--seg_dir', type=str, help='(str) directory that the segmented segments will be saved into, if unspecified, segments will not be saved', default=None)
     parser.add_argument('--decimer_off', help='Turns off decimer complementation', action='store_true')
+    parser.add_argument('--text', help='Turns on text extraction', action='store_true')
     args = parser.parse_args()
 
     
     decimer_on = not args.decimer_off
-
 
     if args.url and args.year:
         print("Please use only one option.")
 
     # user requested a specific url to be checked, year and set is ignored
     if args.url:
-        extract_molecules_from_pdfs(download_pdf(args.url, download_all=False), target_segment_directory=args.seg_dir, decimer_complement=decimer_on)
+        extract_molecules_from_pdfs(
+            download_pdf(args.url, download_all=False), 
+            target_segment_directory=args.seg_dir, 
+            decimer_complement=decimer_on, 
+            get_text=args.text
+            )
         return
     
     # user has not picked the year
@@ -184,7 +226,6 @@ def main():
     if len(str(args.year)) != 4:
         print("Invalid year format. Please provide a 4-digit year (YYYY).")
         return
-    
 
     if (args.year < 2020):
         print("DrugHunter molecules of the month start at the year 2020, please provide a year equal or greater.")
@@ -194,7 +235,12 @@ def main():
         lower_bound, upper_bound = extract_bounds(args.month)
     else:
         lower_bound, upper_bound = 1, 12
-    extract_molecules_of_the_month(args.year, (lower_bound, upper_bound), args.seg_dir, decimer_complement=decimer_on)
+    
+    extract_molecules_of_the_month(
+        args.year, (lower_bound, upper_bound), 
+        args.seg_dir, 
+        decimer_complement=decimer_on, 
+        get_text=args.text)
     return
 
 if __name__ == "__main__":
