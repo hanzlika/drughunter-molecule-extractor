@@ -3,7 +3,7 @@ chembl_structure_pipeline==1.2.0
 chembl_webresource_client==0.10.8
 decimer==2.3.0
 h5py==3.9.0
-huggingface_hub==0.16.4 
+huggingface_hub==0.16.4
 imantics==0.1.12
 imgaug==0.4.0
 ipython==8.14.0
