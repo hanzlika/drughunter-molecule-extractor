@@ -28,7 +28,7 @@ def segment_pdf(pdfs : list[tuple],
     """
     print("Importing decimer segmentation...")
     import_start = time()
-    from segmentation.decimer_segmentation_for_drughunter_extraction.decimer_segmentation import segment_chemical_structures
+    from segmentation.decimer_segmentation_for_drughunter_extraction import segment_chemical_structures
     print(f"Importing decimer took: {time() - import_start} s")
 
     print("Segmenting...")
@@ -63,7 +63,7 @@ def segment_pdf(pdfs : list[tuple],
                 image = Image.fromarray(segment)
                 sub_segment_list.append((filename, page_num, image))
             if get_text:
-                text_list.append(extract_text(os.path.join('pdf_extraction/pdfs', filename), page_num, bboxes))
+                text_list += (extract_text(os.path.join('pdf_extraction/pdfs', filename), page_num, bboxes))
 
 
 
