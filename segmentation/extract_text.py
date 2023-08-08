@@ -4,7 +4,7 @@ import os
 def scale_bbox(bbox, max_x, max_y):
     return (bbox[1] / 2480) * max_x, (bbox[0] / 3508) * max_y,  (bbox[3] / 2480) * max_x, (bbox[2] / 3508) * max_y
 
-def extract_text(path : str,  page_num : int, bboxes : list[tuple]):
+def extract_text(path : str,  page_num : int, bboxes : list[tuple]) -> list[str]:
     doc = fitz.open(path)  
     
     page = doc[page_num]  
@@ -22,6 +22,6 @@ def extract_text(path : str,  page_num : int, bboxes : list[tuple]):
         else:
             target_text_box = converted_bbox[2] - tolerance, converted_bbox[1] - tolerance, \
             page.rect[2] / 2, converted_bbox[3] + tolerance
-        textboxes += page.get_textbox(target_text_box)
+        textboxes.append(page.get_textbox(target_text_box))
 
     return textboxes
