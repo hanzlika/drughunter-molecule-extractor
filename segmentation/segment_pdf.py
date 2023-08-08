@@ -10,7 +10,7 @@ def segment_pdf(pdfs : list[tuple],
                 expand:  bool = True, 
                 visualization : bool = False,
                 get_text : bool = False
-                ) -> list[tuple]:
+                ) -> tuple[list[tuple], list[str]]:
     """
     Segment chemical structures from PDF pages using the decimer_segmentation library.
 
@@ -25,7 +25,7 @@ def segment_pdf(pdfs : list[tuple],
     """
     print("Importing decimer segmentation...")
     import_start = time()
-    from decimer_segmentation import segment_chemical_structures
+    from segmentation.decimer_segmentation_for_drughunter_extraction.decimer_segmentation import segment_chemical_structures
     print(f"Importing decimer took: {time() - import_start} s")
 
     print("Segmenting...")
