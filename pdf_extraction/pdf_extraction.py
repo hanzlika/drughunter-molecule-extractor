@@ -48,7 +48,10 @@ Enter 'q' to quit.")
 
     return pdf_links 
 
-def download_pdf(url : str, download_all : bool = False, target_pdfs_directory : str = 'pdf_extraction/pdfs') -> list:
+def download_pdf(url : str, 
+                 download_all : bool = False, 
+                 target_pdfs_directory : str = 'pdf_extraction/pdfs'
+                 ) -> list:
     """
     Attempts to download PDF files from a given URL.
 
@@ -69,12 +72,11 @@ def download_pdf(url : str, download_all : bool = False, target_pdfs_directory :
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
 
-    # headers=headers prevents 403 forbidden response.status_code
-    response = requests.get(url, headers=headers)
-
-    # 200 -> good status code
-    if response.status_code != 200:
-        print(f"Failed to download the web page. response.status_code: {response.status_code}")
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise exception for non-200 status codes
+    except requests.exceptions.RequestException as e:
+        print("Failed to download the web page:", e)
         return []
 
     # parses the web page for the first pdf file (assuming the molecules
@@ -92,15 +94,23 @@ def download_pdf(url : str, download_all : bool = False, target_pdfs_directory :
 
     # attempt to download pdf files and save them into a list of tuples (filename, content)
     pdf_files = []
+
+    def download_file(file_url):
+        try:
+            pdf_response = requests.get(file_url, headers=headers)
+            pdf_response.raise_for_status()
+            return pdf_response.content
+        except requests.exceptions.RequestException as e:
+            print("Failed to download PDF:", e)
+            return None
+
     for pdf_link in pdf_links:
         file_name = pdf_link['href'].split('/')[-1]
         file_url = pdf_link['href']   
-        pdf_response = requests.get(file_url, headers=headers)
-        if pdf_response.status_code == 200:
-            pdf_files.append((file_name, pdf_response.content))
+        pdf_content = download_file(file_url)
+        if pdf_content:
+            pdf_files.append((file_name, pdf_content))
             print(file_name + " downloaded successfully.")
-        else:
-            print("Failed to download the PDF: ", file_name)
 
     # save to specified directory
     if target_pdfs_directory:
