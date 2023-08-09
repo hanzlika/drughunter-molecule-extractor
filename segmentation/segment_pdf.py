@@ -55,16 +55,20 @@ def segment_pdf(pdfs : list[tuple],
         # expand=True yields better results than expand=False
         sub_segment_list = []
         print(f"Attempting to segment {filename}")
+
         for page_num, page in enumerate(pages):
+
             segments, bboxes = segment_chemical_structures(np.array(page),
                                                    expand=expand,
                                                    visualization=visualization)
-            for index, segment in enumerate(segments):
-                image = Image.fromarray(segment)
-                sub_segment_list.append((filename, page_num, image))
+            
+            sub_segment_list += [
+                (filename, page_num, segment_num, Image.fromarray(segment)) 
+                for segment_num, segment in enumerate(segments)
+            ]
+
             if get_text:
                 text_list += (extract_text(os.path.join('pdf_extraction/pdfs', filename), page_num, bboxes))
-
 
 
         print(f"Found {len(sub_segment_list)} segments in {filename}")

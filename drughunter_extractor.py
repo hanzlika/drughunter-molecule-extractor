@@ -70,15 +70,17 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]],
     # segmentation_results -> list of tuples (source filename, segment)
     segmentation_results, descriptions = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text) 
 
-    # get segments for recognition
-    segments = [segment for (_, _, segment,) in segmentation_results]
+    # get get results of segmentation
+    extraction_results = {
+        'source': [source_filename for source_filename, _, _, _ in segmentation_results],
+        'page number': [page_number for _, page_number, _, _ in segmentation_results],
+        'segment number': [segment_number for _, _, segment_number, _ in segmentation_results],
+    }
 
-    # get source file names for results
-    extraction_results['source'] = [source for source, _, _ in segmentation_results]
-    extraction_results['page number'] = [page_num for _, page_num, _ in segmentation_results]
+    segments = [segment for _, _, _, segment in segmentation_results]
     if (descriptions):
         extraction_results.update(get_information_from_descriptions(descriptions))
- 
+
     
     # recognize with Molscribe
     recognition_results_molscribe = recognize_segments_molscribe(segments)
