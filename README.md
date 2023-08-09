@@ -21,7 +21,7 @@ pip install -r requirments.txt
 Install modified Molscribe
 ```bash
 git clone https://github.com/deimos1078/MolScribe
-cd Molscribe
+cd MolScribe
 python setup.py install
 cd ..
 ```
@@ -33,6 +33,8 @@ cd DECIMER-Image-Segmentation
 pip install .
 cd ..
 ```
+
+Feel free to remove the DECIMER and MolScribe repos once they're installed.
 
 If all goes well, Drug Hunter extractor should now be usable
 ## Usage
