@@ -30,20 +30,11 @@ def get_information_from_descriptions(descriptions : list[str]) -> dict:
     Occassionally the text extraction module puts the name and target on last two lines
     It could be possible to handle that to increase correct name, target proposal rate
     """
-    information = {}
-    information['description'] = [description for description in descriptions]
-    information['proposed_name'] = []
-    information['proposed_target'] = []
-    for description in descriptions:
-        description_list = description.split('\n')
-        if '|' in description_list[0]:
-            proposed_name, proposed_target = description_list[0].split('|')
-        elif len(descriptions) >= 2:
-            proposed_name, proposed_target = description_list[0], description_list[1]
-        else:
-            proposed_name, proposed_target = "", ""
-        information['proposed_name'].append(proposed_name)
-        information['proposed_target'].append(proposed_target)
+    information = {
+        'description': descriptions,
+        'proposed_name': [desc.split('|')[0] if '|' in desc else desc for desc in descriptions],
+        'proposed_target': [desc.split('|')[1] if '|' in desc else desc if len(descriptions) >= 2 else '' for desc in descriptions]
+    }
     return information
 
 
