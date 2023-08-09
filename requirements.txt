@@ -9,9 +9,9 @@ imgaug==0.4.0
 ipython==8.14.0
 keras==2.12.0
 matplotlib==3.7.2
-MolScribe==1.1.1
 numpy==1.23.5
 opencv_python==4.8.0.74
+opencv_python_headless==4.8.0.74
 pandas==2.0.3
 pdf2image==1.16.3
 Pillow==10.0.0
@@ -20,6 +20,6 @@ rdkit==2023.3.2
 Requests==2.31.0
 scipy==1.11.1
 setuptools==59.6.0
-skimage==0.0
+scikit-image
 tensorflow==2.12.0
-torch==1.13.1
+
