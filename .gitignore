@@ -48,3 +48,5 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+segmentation/DECIMER_Image_Segmentation_for_Drug_Hunter
