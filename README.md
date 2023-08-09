@@ -18,7 +18,21 @@ git clone https://github.com/deimos1078/drughunter-molecule-extractor
 cd drughunter-molecule-extractor
 pip install -r requirments.txt
 ```
+Install modified Molscribe
+```bash
+cd Molscribe
+python setup.py install
+cd ..
+```
 
+Install modified decimer_segmentation
+```bash
+cd cd DECIMER-Image-Segmentation
+pip install .
+cd ..
+```
+
+If all goes well, Drug Hunter extractor should now be usable
 ## Usage
 
 Invoking help:
