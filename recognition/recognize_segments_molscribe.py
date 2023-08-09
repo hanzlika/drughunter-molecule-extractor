@@ -8,6 +8,7 @@ from time import time
 import torch
 from huggingface_hub import hf_hub_download
 from chembl_structure_pipeline import standardizer
+from molscribe import MolScribe
 
 def recognize_segments(image_list: list) -> dict:
     """
@@ -24,10 +25,6 @@ def recognize_segments(image_list: list) -> dict:
                 'inchikey': [inchikey_1, inchikey_2, ...]
             }
     """
-    print("Importing MolScribe...")
-    import_start = time()
-    from molscribe import MolScribe
-    print(f"Importing took: {time() - import_start} s")
 
     print("Recognizing with MolScribe...")
     recognition_start = time()
