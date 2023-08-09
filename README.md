@@ -20,6 +20,7 @@ pip install -r requirments.txt
 ```
 Install modified Molscribe
 ```bash
+git clone https://github.com/deimos1078/MolScribe
 cd Molscribe
 python setup.py install
 cd ..
@@ -27,7 +28,8 @@ cd ..
 
 Install modified decimer_segmentation
 ```bash
-cd cd DECIMER-Image-Segmentation
+git clone https://github.com/deimos1078/DECIMER-Image-Segmentation
+cd DECIMER-Image-Segmentation
 pip install .
 cd ..
 ```
