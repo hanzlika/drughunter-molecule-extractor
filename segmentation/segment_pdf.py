@@ -33,7 +33,8 @@ def segment_pdf(pdfs : list[tuple],
                 target_segment_directory : str = None, 
                 expand:  bool = True,
                 get_text : bool = False,
-                molecules_of_the_month : bool = True
+                molecules_of_the_month : bool = True,
+                text_direction : str = 'right'
                 ) -> tuple[
                     list[tuple[str, int, bytes]], 
                     list[str] 
@@ -76,13 +77,13 @@ def segment_pdf(pdfs : list[tuple],
         print(f"Attempting to segment {filename}")
 
         for page_num, page in enumerate(pages):
-
+            segments = []
             if (molecules_of_the_month):
                 segments, bboxes = extract_content_with_borders(binarize_image(page))
 
             if segments == []:
                 from decimer_segmentation import segment_chemical_structures
-                segments, bboxes = segment_chemical_structures(page,
+                segments, bboxes = segment_chemical_structures(np.array(binarize_image(page)),
                                                     expand=expand,
                                                     visualization=False)
             
@@ -92,7 +93,10 @@ def segment_pdf(pdfs : list[tuple],
             ]
 
             if get_text:
-                text_list += (extract_text(os.path.join('pdf_extraction/pdfs', filename), page_num, bboxes))
+                if molecules_of_the_month:
+                    text_list += (extract_text(os.path.join('pdf_extraction/pdfs', filename), page_num, bboxes, 'right'))
+                else:
+                    text_list += (extract_text(os.path.join('pdf_extraction/pdfs', filename), page_num, bboxes, text_direction))
 
 
         print(f"Found {len(sub_segment_list)} segments in {filename}")

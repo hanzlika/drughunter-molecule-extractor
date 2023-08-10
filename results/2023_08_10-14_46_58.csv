@@ -1,0 +1,94 @@
+,source,page number,segment number,description,proposed_name,proposed_target,smiles,inchi,inchikey,validation
+0,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,0,"tivozanib (Fotivda)
+pan-VEGFR kinase inhibitor
+renal cell carcinoma
+oral: 1.34 mg QD for 21 days in 28 
+day cycle",tivozanib (Fotivda),pan-VEGFR kinase inhibitor,CC(C)Oc1ccc(-c2nn([C@@H](C)c3oc4ccc(F)cc4c(=O)c3-c3cccc(F)c3)c3ncnc(N)c23)cc1F,"InChI=1S/C31H24F3N5O3/c1-15(2)41-24-9-7-18(12-22(24)34)27-26-30(35)36-14-37-31(26)39(38-27)16(3)29-25(17-5-4-6-19(32)11-17)28(40)21-13-20(33)8-10-23(21)42-29/h4-16H,1-3H3,(H2,35,36,37)/t16-/m0/s1",IUVCFHHAEHNCFT-INIZCTEOSA-N,True
+1,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,1,"melphalan flufenamide (Pepaxto*)
+peptide-conjugated alkylating agent
+multiple myeloma
+continuous IV (30 mins): 40 mg Q4W",melphalan flufenamide (Pepaxto*),peptide-conjugated alkylating agent,CCOC(=O)[C@H](CC1=CC=C(C=C1)F)NC(=O)[C@H](CC2=CC=C(C=C2)N(CCCl)CCCl)N,"InChI=1S/C24H30Cl2FN3O3/c1-2-33-24(32)22(16-18-3-7-19(27)8-4-18)29-23(31)21(28)15-17-5-9-20(10-6-17)30(13-11-25)14-12-26/h3-10,21-22H,2,11-16,28H2,1H3,(H,29,31)/t21-,22-/m0/s1",YQZNKYXGZSVEHI-VXKWHMMOSA-N,True
+2,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,2,"sotorasib (Lumakras)
+KRASG12C GTPase inhibitor
+NSCLC
+oral: 960 mg QD",sotorasib (Lumakras),KRASG12C GTPase inhibitor,C=CC(=O)N1CCN(c2nc(=O)n(-c3c(C)ccnc3C(C)C)c3nc(-c4c(O)cccc4F)c(F)cc23)[C@@H](C)C1,"InChI=1S/C30H30F2N6O3/c1-6-23(40)36-12-13-37(18(5)15-36)28-19-14-21(32)26(24-20(31)8-7-9-22(24)39)34-29(19)38(30(41)35-28)27-17(4)10-11-33-25(27)16(2)3/h6-11,14,16,18,39H,1,12-13,15H2,2-5H3/t18-/m0/s1",NXQKSXLFSAEQCZ-SFHVURJKSA-N,True
+3,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,3,"tivozanib (Fotivda)
+pan-VEGFR kinase inhibitor
+renal cell carcinoma
+oral: 1.34 mg QD for 21 days in 28 
+day cycle",tivozanib (Fotivda),pan-VEGFR kinase inhibitor,COc1cc2nccc(Oc3ccc(NC(=O)Nc4cc(C)on4)c(Cl)c3)c2cc1OC,"InChI=1S/C22H19ClN4O5/c1-12-8-21(27-32-12)26-22(28)25-16-5-4-13(9-15(16)23)31-18-6-7-24-17-11-20(30-3)19(29-2)10-14(17)18/h4-11H,1-3H3,(H2,25,26,27,28)",SPMVMDHWKHCIDT-UHFFFAOYSA-N,True
+4,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,4,"trilaciclib (Cosela)
+CDK4 and 6 kinase inhibitor
+myelosuppression in SCLC
+continuous IV: 240 mg/m2 prior 
+to chemotherapy",trilaciclib (Cosela),CDK4 and 6 kinase inhibitor,CN1CCN(c2ccc(Nc3ncc4cc5n(c4n3)C3(CCCCC3)CNC5=O)nc2)CC1,"InChI=1S/C24H30N8O/c1-30-9-11-31(12-10-30)18-5-6-20(25-15-18)28-23-26-14-17-13-19-22(33)27-16-24(7-3-2-4-8-24)32(19)21(17)29-23/h5-6,13-15H,2-4,7-12,16H2,1H3,(H,27,33)(H,25,26,28,29)",PDGKHKMBHVFCMG-UHFFFAOYSA-N,True
+5,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,5,"samidorphan + olanzapine (Lybalvi
+opioid antagonist
+schizophrenia, bipolar I disorder
+oral: up to 10 + 20 mg QD*",samidorphan + olanzapine (Lybalvi,opioid antagonist,C1CC1CN2CC[C@@]34CC(=O)CC[C@]4([C@H]2CC5=CC=C(C(=C53)O)C(=O)N)O,"InChI=1S/C21H26N2O4/c22-19(26)15-4-3-13-9-16-21(27)6-5-14(24)10-20(21,17(13)18(15)25)7-8-23(16)11-12-1-2-12/h3-4,12,16,25,27H,1-2,5-11H2,(H2,22,26)/t16-,20-,21-/m1/s1",RYIDHLJADOKWFM-MAODMQOUSA-N,True
+6,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,6,"atogepant (Qulipta)
+e)
+dex
+calcitonin gene-related peptide 
+(CGRP) receptor antagonist
+migraine
+oral: up to 60 mg QD
+ne 
+D
+ca",atogepant (Qulipta),e),C[C@@H]1[C@H](c2c(F)ccc(F)c2F)C[C@H](NC(=O)c2cnc3c(c2)C[C@@]2(C3)C(=O)Nc3ncccc32)C(=O)N1CC(F)(F)F,"InChI=1S/C29H23F6N5O3/c1-13-16(22-18(30)4-5-19(31)23(22)32)8-20(26(42)40(13)12-29(33,34)35)38-25(41)15-7-14-9-28(10-21(14)37-11-15)17-3-2-6-36-24(17)39-27(28)43/h2-7,11,13,16,20H,8-10,12H2,1H3,(H,38,41)(H,36,39,43)/t13-,16-,20+,28+/m1/s1",QIVUCLWGARAQIO-OLIXTKCUSA-N,True
+7,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,7,"serdexmethylphenidate +
+dexmethylphenidate (Azstarys)
+catecholamine reuptake inhibitor, 
+CNS stimulant 
+ADHD",serdexmethylphenidate +,dexmethylphenidate (Azstarys),[H][C@]1([C@H](C(=O)OC)c2ccccc2)CCCCN1C(=O)OC[n+]1cccc(C(=O)N[C@@H](CO)C(=O)[O-])c1,"InChI=1S/C25H29N3O8/c1-35-24(33)21(17-8-3-2-4-9-17)20-11-5-6-13-28(20)25(34)36-16-27-12-7-10-18(14-27)22(30)26-19(15-29)23(31)32/h2-4,7-10,12,14,19-21,29H,5-6,11,13,15-16H2,1H3,(H-,26,30,31,32)/t19-,20+,21+/m0/s1",UBZPNQRBUOBBLN-PWRODBHTSA-N,True
+8,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,8,"maralixibat (Livmarli)
+ileal bile acid transporter 
+(IBAT) inhibitor
+pruritus in Alagille syndrome
+oral: 380 μg/kg QD",maralixibat (Livmarli),ileal bile acid transporter ,CCCCC1(CCCC)CS(=O)(=O)c2ccc(N(C)C)cc2[C@@H](c2ccc(OCc3ccc(C[N+]45CCN(CC4)CC5)cc3)cc2)[C@H]1O,"InChI=1S/C40H56N3O4S/c1-5-7-19-40(20-8-6-2)30-48(45,46)37-18-15-34(41(3)4)27-36(37)38(39(40)44)33-13-16-35(17-14-33)47-29-32-11-9-31(10-12-32)28-43-24-21-42(22-25-43)23-26-43/h9-18,27,38-39,44H,5-8,19-26,28-30H2,1-4H3/q+1/t38-,39-/m1/s1",STPKWKPURVSAJF-LJEWAXOPSA-N,True
+9,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,9,"belzutifan (Welireg)
+hypoxia-inducible factor 2α 
+(HIF2α) inhibitor
+VHL disease
+oral: 120 mg QD",belzutifan (Welireg),hypoxia-inducible factor 2α ,CS(=O)(=O)c1ccc(Oc2cc(F)cc(C#N)c2)c2c1[C@H](O)[C@H](F)[C@@H]2F,"InChI=1S/C17H12F3NO4S/c1-26(23,24)12-3-2-11(13-14(12)17(22)16(20)15(13)19)25-10-5-8(7-21)4-9(18)6-10/h2-6,15-17,22H,1H3/t15-,16-,17+/m1/s1",LOMMPXLFBTZENJ-ZACQAIPSSA-N,True
+10,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,10,"odevixibat (Bylvay)
+ileal bile acid transporter
+(IBAT) inhibitor
+pruritus in familial intrahep
+cholestasis
+oral: 40 μg /kg QD",odevixibat (Bylvay),ileal bile acid transporter,CCCCC1(CCCC)CN(c2ccccc2)c2cc(SC)c(OCC(=O)N[C@@H](C(=O)N[C@@H](CC)C(=O)O)c3ccc(O)cc3)cc2S(=O)(=O)N1,"InChI=1S/C37H48N4O8S2/c1-5-8-19-37(20-9-6-2)24-41(26-13-11-10-12-14-26)29-21-31(50-4)30(22-32(29)51(47,48)40-37)49-23-33(43)39-34(25-15-17-27(42)18-16-25)35(44)38-28(7-3)36(45)46/h10-18,21-22,28,34,40,42H,5-9,19-20,23-24H2,1-4H3,(H,38,44)(H,39,43)(H,45,46)/t28-,34+/m0/s1",XULSCZPZVQIMFM-IPZQJPLYSA-N,True
+11,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,11,"fosdenopterin (Nulibry)
+cyclic pyranopterin monophosphate (cPMP) 
+substrate replacement
+molybdenum cofactor deficiency type A
+continuous IV: up to 0.9 mg/kg QD",fosdenopterin (Nulibry),cyclic pyranopterin monophosphate (cPMP) ,[H][C@@]12COP(=O)(O)O[C@]1([H])C(O)(O)[C@]1([H])Nc3c([nH]c(N)nc3=O)N[C@]1([H])O2,"InChI=1S/C10H14N5O8P/c11-9-14-6-3(7(16)15-9)12-4-8(13-6)22-2-1-21-24(19,20)23-5(2)10(4,17)18/h2,4-5,8,12,17-18H,1H2,(H,19,20)(H4,11,13,14,15,16)/t2-,4-,5+,8-/m1/s1",CZAKJJUNKNPTTO-AJFJRRQVSA-N,True
+12,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,12,"cabotegravir + rilpivirine 
+(Cabenuva)
+HIV1 integrase strand transfer 
+inhibitor (INSTI)",cabotegravir + rilpivirine ,(Cabenuva),[H][C@@]12Cn3cc(C(=O)NCc4ccc(F)cc4F)c(=O)c(O)c3C(=O)N1[C@@H](C)CO2,"InChI=1S/C19H17F2N3O5/c1-9-8-29-14-7-23-6-12(16(25)17(26)15(23)19(28)24(9)14)18(27)22-5-10-2-3-11(20)4-13(10)21/h2-4,6,9,14,26H,5,7-8H2,1H3,(H,22,27)/t9-,14+/m0/s1",WCWSTNLSLKSJPK-LKFCYVNXSA-N,True
+13,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,13,,,,CCOc1ncc(C)c2c1[C@H](c1ccc(C#N)cc1OC)C(C(N)=O)=C(C)N2,"InChI=1S/C21H22N4O3/c1-5-28-21-18-17(14-7-6-13(9-22)8-15(14)27-4)16(20(23)26)12(3)25-19(18)11(2)10-24-21/h6-8,10,17,25H,5H2,1-4H3,(H2,23,26)/t17-/m1/s1",BTBHLEZXCOBLCY-QGZVFWFLSA-N,True
+14,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,14,"voclosporin (Lupkynis)
+calcineurin inhibitor 
+immunosuppressant
+lupus nephritis
+oral: starting 23.7 mg BID",voclosporin (Lupkynis),calcineurin inhibitor ,C=C/C=C/C[C@@H](C)[C@H]([C@H]1C(=O)N[C@@H](CC)C(=O)N(C)CC(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@H](C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](C(C)C)C(=O)N1C)O,"InChI=1S/C63H111N11O12/c1-25-27-28-29-41(15)53(76)52-57(80)66-44(26-2)59(82)68(18)34-49(75)69(19)45(30-35(3)4)56(79)67-50(39(11)12)62(85)70(20)46(31-36(5)6)55(78)64-42(16)54(77)65-43(17)58(81)71(21)47(32-37(7)8)60(83)72(22)48(33-38(9)10)61(84)73(23)51(40(13)14)63(86)74(52)24/h25,27-28,35-48,50-53,76H,1,26,29-34H2,2-24H3,(H,64,78)(H,65,77)(H,66,80)(H,67,79)/b28-27+/t41-,42+,43-,44+,45+,46+,47+,48+,50+,51+,52+,53-/m1/s1",BICRTLVBTLFLRD-PTWUADNWSA-N,True
+15,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,15,"avacopan (Tavneos)
+complement C5a receptor antagonist
+anti-neutrophil cytoplasmic 
+autoantibody-associated vasculitis
+oral: 30 mg BID",avacopan (Tavneos),complement C5a receptor antagonist,Cc1ccc(NC(=O)[C@H]2CCCN(C(=O)c3c(C)cccc3F)[C@H]2c2ccc(NC3CCCC3)cc2)cc1C(F)(F)F,"InChI=1S/C33H35F4N3O2/c1-20-12-15-25(19-27(20)33(35,36)37)39-31(41)26-10-6-18-40(32(42)29-21(2)7-5-11-28(29)34)30(26)22-13-16-24(17-14-22)38-23-8-3-4-9-23/h5,7,11-17,19,23,26,30,38H,3-4,6,8-10,18H2,1-2H3,(H,39,41)/t26-,30-/m0/s1",PUKBOVABABRILL-YZNIXAGQSA-N,True
+16,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,16,"belumosudil (Rezurock)
+selective ROCK2 kinase inhibitor
+chronic graft-vs-host disease
+oral: 200 mg QD",belumosudil (Rezurock),selective ROCK2 kinase inhibitor,CC(C)NC(=O)COc1cccc(-c2nc(Nc3ccc4[nH]ncc4c3)c3ccccc3n2)c1,"InChI=1S/C26H24N6O2/c1-16(2)28-24(33)15-34-20-7-5-6-17(13-20)25-30-23-9-4-3-8-21(23)26(31-25)29-19-10-11-22-18(12-19)14-27-32-22/h3-14,16H,15H2,1-2H3,(H,27,32)(H,28,33)(H,29,30,31)",GKHIVNAUVKXIIY-UHFFFAOYSA-N,True
+17,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,17,"difelikefalin (Korsuva)
+v
+kappa opioid receptor agonist
+pruritus in CKD
+IV: 0.5 μg /kg
+gua
+re",difelikefalin (Korsuva),v,CC(C)C[C@@H](NC(=O)[C@@H](Cc1ccccc1)NC(=O)[C@H](N)Cc1ccccc1)C(=O)N[C@H](CCCCN)C(=O)N1CCC(N)(C(=O)O)CC1,"InChI=1S/C36H53N7O6/c1-24(2)21-29(32(45)40-28(15-9-10-18-37)34(47)43-19-16-36(39,17-20-43)35(48)49)42-33(46)30(23-26-13-7-4-8-14-26)41-31(44)27(38)22-25-11-5-3-6-12-25/h3-8,11-14,24,27-30H,9-10,15-23,37-39H2,1-2H3,(H,40,45)(H,41,44)(H,42,46)(H,48,49)/t27-,28-,29-,30-/m1/s1",FWMNVWWHGCHHJJ-SKKKGAJSSA-N,True
+18,2021-Small-Molecule-Drug-Approvals-Poster.pdf,0,18,"vericiguat (Verquvo)
+guanylate cyclase stimulator
+reduce risk of heart failure
+oral: 2.5 mg QD",vericiguat (Verquvo),guanylate cyclase stimulator,COC(=O)Nc1c(N)nc(-c2nn(Cc3ccccc3F)c3ncc(F)cc23)nc1N,"InChI=1S/C19H16F2N8O2/c1-31-19(30)25-14-15(22)26-17(27-16(14)23)13-11-6-10(20)7-24-18(11)29(28-13)8-9-4-2-3-5-12(9)21/h2-7H,8H2,1H3,(H,25,30)(H4,22,23,26,27)",QZFHIXARHDBPBY-UHFFFAOYSA-N,True

@@ -45,7 +45,7 @@ python3 drughunter_extractor.py -h
 ```
 will produce:
 ```text
-usage: drughunter_extractor.py [-h] [-y YEAR] [-m MONTH] [-u URL] [--seg_dir SEG_DIR] [--decimer_off] [--text]
+usage: drughunter_extractor.py [-h] [-y YEAR] [-m MONTH] [-u URL] [--seg_dir SEG_DIR] [--decimer_off] [--text] [--direction DIRECTION] [--separator SEPARATOR]
 
 DrugHunter extractor
 
@@ -58,10 +58,13 @@ options:
   --seg_dir SEG_DIR     (str) directory that the segmented segments will be saved into, if unspecified, segments will not be saved
   --decimer_off         Turns off decimer complementation
   --text                Turns on text extraction
+  --direction DIRECTION
+                        Specifies in which direction the text is from the molecules
+  --separator SEPARATOR
+                        Specifies which separator is used in the document to separate name and target.
 ```
 
-
-### Extract from url
+### Extract from url (without text)
 
 -u, --url  Specify the url containing pdf (or pdfs) that the script will attempt to extract molecules from 
 
@@ -96,6 +99,14 @@ EC-edits_DH-2022-First-in-Class-Small-Molecules-R1..pdf downloaded successfully.
 
 Now simply wait for the script to perform segmentation, recognition and validation.
 The results will be exported into a csv in the results directory.
+
+
+### Extract from url (with text) (recommended only for extracting text out of DrugHunter)
+
+use --direction with either "down" or "right" to specify where the text you're looking to extract is relative to the molecule
+
+use --separator if the text information contains a "NAME SEPARATOR TARGET" line to specify the separator
+
 
 ### Extract all Molecules of the Month within a given year
 
@@ -135,7 +146,8 @@ python3 drughunter_extractor.py --year 2022 --month 6 --decimer_off
 1) The webpage is accessed through [requests](https://pypi.org/project/requests/)
 2) [BeautifulSoup](https://pypi.org/project/beautifulsoup4/) is used to gather all pdf links on the webpage
 3) Pdfs are downloaded using those links
-4) Pdfs are segmented into individual images using [decimer-image-segmentation](https://github.com/Kohulan/DECIMER-Image-Segmentation/tree/master)
+4a) Pdfs are segmented into individual images using [decimer-image-segmentation](https://github.com/Kohulan/DECIMER-Image-Segmentation/tree/master)
+4b) If the molecules of the months set is targeted, segmentation is done using rectangle detection instead
 5) If --text option is on, the bounding boxes of these segments are used to attempt text extraction as well (using fitz from [pymupdf](https://pymupdf.readthedocs.io/en/latest/module.html))
 6) The segments are recognized using [MolScribe](https://github.com/thomas0809/MolScribe)
 7) Inchikeys are gathered from the recognized smiles using [rdkit](https://www.rdkit.org/)

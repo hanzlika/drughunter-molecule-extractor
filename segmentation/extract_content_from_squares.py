@@ -11,7 +11,7 @@ def unique_core(core_set, new_core):
 def sort_segments_bboxes(
         segments : list[np.array], 
         bboxes : list[tuple[int, int, int, int]], #(y0, x0, y1, x1)
-        same_row_pixel_threshold = 50
+        same_row_pctg_threshold = 0.01
         ) -> tuple[np.array, list[tuple[int, int, int, int]]]:
     """
     Sorts segments and bounding boxes in "reading order"
@@ -32,7 +32,7 @@ def sort_segments_bboxes(
     rows = []
     current_row = [sorted_bboxes[0]]
     for bounding_box in sorted_bboxes[1:]:
-        if abs(bounding_box[0] - current_row[-1][0]) < same_row_pixel_threshold:  # You can adjust this threshold as needed
+        if abs(bounding_box[0] - current_row[-1][0]) < same_row_pctg_threshold:  # You can adjust this threshold as needed
             current_row.append(bounding_box)
         else:
             rows.append(sorted(current_row, key=lambda x: x[1]))  # Sort by x-coordinate within each row
@@ -68,9 +68,9 @@ def extract_content_with_borders(page):
                     content = image[y:y+h, x:x+w]
                     core_set.add((x, y))
                     images.append(content)
-                    bounding_box = (y, x, y + h, x + h)
+                    bounding_box = (y / float(image.shape[0]), x / float(image.shape[1]), (y + h) / float(image.shape[0]), (x + h)/image.shape[1])
                     bounding_boxes.append((bounding_box))
 
-    sorted_images, sorted_bboxes = sort_segments_bboxes(images, bounding_boxes, 50)
+    sorted_images, sorted_bboxes = sort_segments_bboxes(images, bounding_boxes, 0.01)
 
     return  sorted_images, sorted_bboxes

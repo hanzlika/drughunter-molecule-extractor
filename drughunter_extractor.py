@@ -12,7 +12,7 @@ from segmentation.segment_pdf import segment_pdf
 from validation.validate_with_chembl_webresource import validate_inchikey_list
 
 
-def get_information_from_descriptions(descriptions : list[str]) -> dict:
+def get_information_from_descriptions(descriptions : list[str], separator : str) -> dict:
     """
     Attempt to parse information out of a list of descriptions.
 
@@ -36,8 +36,9 @@ def get_information_from_descriptions(descriptions : list[str]) -> dict:
         proposed_name, porposed_target = '', ''
         text_lines = description.split('\n')
         for text_line in text_lines:
-            if '|' in text_line:
-                proposed_name, porposed_target = text_line.split('|')
+            if separator in text_line:
+                proposed_name, porposed_target = text_line.split(separator)
+                break
 
         if proposed_name == '':
             if len(text_lines) >= 1:
@@ -59,7 +60,10 @@ def get_information_from_descriptions(descriptions : list[str]) -> dict:
 def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]], 
                                 target_segment_directory : str = None, 
                                 decimer_complement : bool = True,
-                                get_text : bool = False
+                                get_text : bool = False,
+                                text_direction : str = 'right',
+                                molecules_of_the_month : bool = True,
+                                separator : str = '|'
                                 ) -> None:
     """
     Extract molecules from a list of PDFs 
@@ -77,18 +81,18 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]],
     extraction_results = {}
 
     # segmentation_results -> list of tuples (source filename, segment)
-    segmentation_results, descriptions = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text, molecules_of_the_month=True) 
+    segmentation_results, descriptions = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text, molecules_of_the_month=molecules_of_the_month, text_direction=text_direction) 
 
     # get get results of segmentation
     extraction_results = {
         'source': [source_filename for source_filename, _, _, _ in segmentation_results],
         'page number': [page_number for _, page_number, _, _ in segmentation_results],
-        'segment number': [segment_number for _, _, segment_number, _ in segmentation_results],
+        'segment number': [segment_number for _, _, segment_number, _ in segmentation_results]
     }
 
     segments = [segment for _, _, _, segment in segmentation_results]
     if (descriptions):
-        extraction_results.update(get_information_from_descriptions(descriptions))
+        extraction_results.update(get_information_from_descriptions(descriptions, separator))
 
     
     # recognize with Molscribe
@@ -116,7 +120,8 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]],
 
         # complement molscribe unsuccessful recognitions with successful decimer recognitions
         for index, validation_result in enumerate(recognition_results_decimer['validation']):
-            if validation_result is True:
+            # if decimer got better result that molscribe
+            if validation_result is True or (recognition_results_decimer['inchikey'] != '' and recognition_results_molscribe['inchikey'] == ''):
                 for key in ['smiles', 'inchi', 'inchikey', 'validation']:
                     recognition_results_molscribe[key][index_list[index]] = recognition_results_decimer[key][index]
 
@@ -163,7 +168,7 @@ def extract_molecules_of_the_month(target_year : int,
 
     # get chemical info out of pdfs
     if pdfs:
-        extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory, decimer_complement=decimer_complement, get_text=get_text)
+        extract_molecules_from_pdfs(pdfs, target_segment_directory=target_segment_directory, decimer_complement=decimer_complement, get_text=get_text, text_direction='right')
 
 
 def extract_bounds(input_string : str) -> tuple[int, int]:
@@ -211,6 +216,8 @@ def main():
     parser.add_argument('--seg_dir', type=str, help='(str) directory that the segmented segments will be saved into, if unspecified, segments will not be saved', default=None)
     parser.add_argument('--decimer_off', help='Turns off decimer complementation', action='store_true')
     parser.add_argument('--text', help='Turns on text extraction', action='store_true')
+    parser.add_argument('--direction', type=str, help='Specifies in which direction the text is from the molecules', default='right')
+    parser.add_argument('--separator', type=str, help='Specifies which separator is used in the document to separate name and target.', default='|')
     args = parser.parse_args()
 
     
@@ -225,7 +232,10 @@ def main():
             download_pdf(args.url, download_all=False), 
             target_segment_directory=args.seg_dir, 
             decimer_complement=decimer_on, 
-            get_text=args.text
+            get_text=args.text,
+            text_direction=args.direction,
+            molecules_of_the_month = False,
+            separator = args.separator
             )
         return
     
