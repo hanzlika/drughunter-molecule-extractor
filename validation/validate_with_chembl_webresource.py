@@ -1,4 +1,5 @@
 from chembl_webresource_client.unichem import unichem_client as unichem
+from time import sleep
 
 def validate_inchikey_list(inchikey_list : list[str]) -> list[bool]:
     print("Validating through unichem.connectivity()...")
@@ -18,6 +19,7 @@ def validate_inchikey_list(inchikey_list : list[str]) -> list[bool]:
             validation_list.append(True)
         except:
             validation_list.append(False)
+        sleep(0.1)
     return validation_list
 
 def main():

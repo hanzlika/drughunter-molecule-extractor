@@ -4,12 +4,36 @@ from pdf2image import convert_from_bytes
 from PIL import Image
 from time import time
 from segmentation.extract_text import extract_text
+from segmentation.extract_content_from_squares import extract_content_with_borders
+
+def binarize_image(img):
+    width, height = img.size
+    
+    # Create a new image with the same dimensions
+    new_img = Image.new("RGB", (width, height))
+    
+    # Loop through each pixel in the image
+    for y in range(height):
+        for x in range(width):
+            # Get the RGB values of the pixel
+            r, g, b = img.getpixel((x, y))
+            
+            # Check if all RGB values are equal
+            if abs(r - g) + abs(r - b) + abs(b - g) < 20 and r + b + g < 700:
+                new_pixel = (r, g, b)
+            else:
+                new_pixel = (255, 255, 255)  # Set pixel to pure white
+            
+            # Put the new pixel in the new image
+            new_img.putpixel((x, y), new_pixel)
+    
+    return new_img
 
 def segment_pdf(pdfs : list[tuple],  
                 target_segment_directory : str = None, 
-                expand:  bool = True, 
-                visualization : bool = False,
-                get_text : bool = False
+                expand:  bool = True,
+                get_text : bool = False,
+                molecules_of_the_month : bool = True
                 ) -> tuple[
                     list[tuple[str, int, bytes]], 
                     list[str] 
@@ -26,11 +50,6 @@ def segment_pdf(pdfs : list[tuple],
     Returns:
         list[tuple]: A list of tuples containing the filename and segmented images extracted from the PDF.
     """
-    print("Importing decimer segmentation...")
-    import_start = time()
-    from decimer_segmentation import segment_chemical_structures
-    print(f"Importing decimer took: {time() - import_start} s")
-
     print("Segmenting...")
     segmentation_start = time()
     
@@ -58,9 +77,14 @@ def segment_pdf(pdfs : list[tuple],
 
         for page_num, page in enumerate(pages):
 
-            segments, bboxes = segment_chemical_structures(np.array(page),
-                                                   expand=expand,
-                                                   visualization=visualization)
+            if (molecules_of_the_month):
+                segments, bboxes = extract_content_with_borders(binarize_image(page))
+
+            if segments == []:
+                from decimer_segmentation import segment_chemical_structures
+                segments, bboxes = segment_chemical_structures(page,
+                                                    expand=expand,
+                                                    visualization=False)
             
             sub_segment_list += [
                 (filename, page_num, segment_num, Image.fromarray(segment)) 
@@ -76,7 +100,7 @@ def segment_pdf(pdfs : list[tuple],
         # save to specified directory
         if target_segment_directory:
             os.makedirs(os.path.join(target_segment_directory, filename), exist_ok=True)
-            for index, (filename, segment) in enumerate(sub_segment_list):
+            for index, (filename, _, _, segment) in enumerate(sub_segment_list):
                 segment.save(os.path.join(target_segment_directory, f"{filename}/{index}.png"))
             print(f"Segments from {filename} saved into {target_segment_directory}/{filename}")
         segment_list += sub_segment_list
@@ -87,9 +111,9 @@ def segment_pdf(pdfs : list[tuple],
 
 def main(): 
     # example use:
-    filepath = "pdf_extraction/pdfs/DH-MOTM-Poster-June-2023-Revised.pdf"
+    filepath = "pdf_extraction/pdfs/DH-MOTM-Poster-December-2022-R4.pdf"
     with open(filepath, "rb") as f:
-        _, text = segment_pdf([("DH-MOTM-Poster-June-2023-Revised.pdf", f.read())], target_segment_directory="segmentation/segments/experiments", expand=True)
+        _, text = segment_pdf([("DH-MOTM-Poster-December-2022-R4.pdf", f.read())], target_segment_directory="segmentation/segments/experiments", expand=True)
         print("\n->".join(text))
 
 if __name__ == '__main__':

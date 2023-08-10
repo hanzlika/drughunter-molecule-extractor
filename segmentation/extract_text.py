@@ -10,7 +10,7 @@ def extract_text(path : str,  page_num : int, bboxes : list[tuple]) -> list[str]
     page = doc[page_num]  
 
     rect = page.rect
-    tolerance = 15
+    tolerance = 0
 
     textboxes = []
 

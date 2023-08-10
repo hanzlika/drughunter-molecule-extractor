@@ -30,10 +30,28 @@ def get_information_from_descriptions(descriptions : list[str]) -> dict:
     Occassionally the text extraction module puts the name and target on last two lines
     It could be possible to handle that to increase correct name, target proposal rate
     """
+
+    proposed_names, porposed_targets = [], []
+    for description in descriptions:
+        proposed_name, porposed_target = '', ''
+        text_lines = description.split('\n')
+        for text_line in text_lines:
+            if '|' in text_line:
+                proposed_name, porposed_target = text_line.split('|')
+
+        if proposed_name == '':
+            if len(text_lines) >= 1:
+                proposed_name = text_lines[0]
+            if len(text_lines) >= 2:
+                porposed_target = text_lines[1]
+                
+        proposed_names.append(proposed_name)
+        porposed_targets.append(porposed_target)
+
     information = {
         'description': descriptions,
-        'proposed_name': [desc.split('|')[0] if '|' in desc else desc for desc in descriptions],
-        'proposed_target': [desc.split('|')[1] if '|' in desc else desc if len(descriptions) >= 2 else '' for desc in descriptions]
+        'proposed_name': proposed_names,
+        'proposed_target': porposed_targets
     }
     return information
 
@@ -59,7 +77,7 @@ def extract_molecules_from_pdfs(pdfs : list[tuple[str, bytes]],
     extraction_results = {}
 
     # segmentation_results -> list of tuples (source filename, segment)
-    segmentation_results, descriptions = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text) 
+    segmentation_results, descriptions = segment_pdf(pdfs, target_segment_directory=target_segment_directory, get_text=get_text, molecules_of_the_month=True) 
 
     # get get results of segmentation
     extraction_results = {
