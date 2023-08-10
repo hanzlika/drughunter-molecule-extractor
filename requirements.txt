@@ -1,7 +1,7 @@
 beautifulsoup4==4.10.0
 chembl_structure_pipeline==1.2.0
 chembl_webresource_client==0.10.8
-decimer==2.3.0
+decimer
 h5py==3.9.0
 huggingface_hub==0.16.4
 imantics==0.1.12
