@@ -107,6 +107,10 @@ use --direction with either "down" or "right" to specify where the text you're l
 
 use --separator if the text information contains a "NAME SEPARATOR TARGET" line to specify the separator
 
+```bash
+python3 drughunter_extractor.py --url https://drughunter.com/resource/2022-drug-approvals/ --text --direction "down" --separator ','
+```
+
 
 ### Extract all Molecules of the Month within a given year
 
