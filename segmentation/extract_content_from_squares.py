@@ -24,7 +24,8 @@ def sort_segments_bboxes(
     Returns:
         segments and bboxes in reading order
     """
-
+    if bboxes == []:
+        return segments, bboxes
     # Sort by y-coordinate (top-to-bottom reading order)
     sorted_bboxes = sorted(bboxes, key=lambda bounding_box: bounding_box[0])
 
@@ -63,7 +64,7 @@ def extract_content_with_borders(page):
             x, y, w, h = cv2.boundingRect(contour)
             aspect_ratio = w / float(h)
 
-            if 0.9 <= aspect_ratio <= 1.1 and w > 200 and w < 500:  # Check for approximately square shape
+            if 0.8 <= aspect_ratio <= 1.2 and w > 100 and w < 600:  # Check for approximately square shape
                 if unique_core(core_set, (x, y)):
                     content = image[y:y+h, x:x+w]
                     core_set.add((x, y))

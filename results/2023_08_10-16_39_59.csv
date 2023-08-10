@@ -1,0 +1,88 @@
+,source,page number,segment number,description,proposed_name,proposed_target,smiles,inchi,inchikey,validation
+0,MOTM-September-2021.pdf,0,0,"penicillin-binding protein + β-lactamase inh.
+preclin. eff. at 50 mpk SC, 2,000 mpk tolerated
+multitarget SBDD + opt. for porin permeability
+Nature
+Entasis Therapeutics
+PDB:
+WL",penicillin-binding protein + β-lactamase inh.,"preclin. eff. at 50 mpk SC, 2,000 mpk tolerated",CN/C(=N\O)[C@@H]1c2c(cnn2C)[C@@H]2CN1C(=O)N2OS(=O)(=O)O[Na],"InChI=1S/C10H14N6O6S.Na/c1-11-9(13-18)8-7-5(3-12-14(7)2)6-4-15(8)10(17)16(6)22-23(19,20)21;/h3,6,8,18H,4H2,1-2H3,(H,11,13)(H,19,20,21);/q;+1/p-1/t6-,8-;/m0./s1",DENRJGZATCJYJD-QMGYSKNISA-M,True
+1,MOTM-September-2021.pdf,0,1,"selective factor Xia serine protease inhib.
+oral, phase II, cardiovascular
+from opt. of previous macrocyclic FXIa inh.
+Journal of Medicinal Chemistry
+Bristol Myers Squibb
+milvexian | FXIa
+B: ",milvexian , FXIa,C[C@@H]1CCC[C@H](n2cnc(-c3cc(Cl)ccc3-n3cc(Cl)nn3)cc2=O)c2cc(ccn2)-c2c(cnn2C(F)F)NC1=O,"InChI=1S/C28H23Cl2F2N9O2/c1-15-3-2-4-23(20-9-16(7-8-33-20)26-21(36-27(15)43)12-35-41(26)28(31)32)39-14-34-19(11-25(39)42)18-10-17(29)5-6-22(18)40-13-24(30)37-38-40/h5-15,23,28H,2-4H2,1H3,(H,36,43)/t15-,23+/m1/s1",FSWFYCYPTDLKON-CMJOXMDJSA-N,True
+2,MOTM-September-2021.pdf,0,2,"pseudo-irreversible methyltransferase inh.
+oral, phase I, cancer
+from adenosine derivative library + opt.
+Molecular Cancer Therapeutics
+Janssen R&D
+onametostat | PRMT5
+DB: ",onametostat , PRMT5,Nc1nc2cc(CC[C@H]3C[C@@H](n4ccc5c(N)ncnc54)[C@H](O)[C@@H]3O)ccc2cc1Br,"InChI=1S/C22H23BrN6O2/c23-15-8-12-3-1-11(7-16(12)28-21(15)25)2-4-13-9-17(19(31)18(13)30)29-6-5-14-20(24)26-10-27-22(14)29/h1,3,5-8,10,13,17-19,30-31H,2,4,9H2,(H2,25,28)(H2,24,26,27)/t13-,17+,18+,19-/m0/s1",DBSMLQTUDJVICQ-CJODITQLSA-N,True
+3,MOTM-September-2021.pdf,0,3,"selective rev. DNA methyltransferase inhibitor
+preclinical eff. at 30 mpk SC BID (xenograft)
+from 1.8M cmpd enzymatic HTS + opt.
+Nature Cancer
+GlaxoSmithKline",selective rev. DNA methyltransferase inhibitor,preclinical eff. at 30 mpk SC BID (xenograft),CCc1c(C#N)c(SC(C(N)=O)c2ccccc2)nc(N2CCC(N)CC2)c1C#N,"InChI=1S/C22H24N6OS/c1-2-16-17(12-23)21(28-10-8-15(25)9-11-28)27-22(18(16)13-24)30-19(20(26)29)14-6-4-3-5-7-14/h3-7,15,19H,2,8-11,25H2,1H3,(H2,26,29)",KNKHRZYILDZLRE-UHFFFAOYSA-N,True
+4,MOTM-September-2021.pdf,0,4,"selective CSF1R kinase inhibitor
+oral, 30 mg BIW, phase III, cancer
+from structure-based design
+Molecular Cancer Therapeutics
+Deciphera Pharmaceuticals",selective CSF1R kinase inhibitor,"oral, 30 mg BIW, phase III, cancer",Cc1nc(-c2cnc(NC(C)C)n(C)c2=O)ccc1Oc1ccnc(-c2cnn(C)c2)c1,"InChI=1S/C23H25N7O2/c1-14(2)27-23-25-12-18(22(31)30(23)5)19-6-7-21(15(3)28-19)32-17-8-9-24-20(10-17)16-11-26-29(4)13-16/h6-14H,1-5H3,(H,25,27)",TVGAHWWPABTBCX-UHFFFAOYSA-N,True
+5,MOTM-September-2021.pdf,0,5,"oral CRBN-based androgen receptor degrader
+preclinical eff. at 10 mpk QD (xenograft)
+from previously disclosed AR molecule
+Journal of Medicinal Chemistry
+University of Michigan
+ARD-2585 | AR",ARD-2585 , AR,CN(c1ccc(C#N)c(Cl)c1)[C@H]1CC[C@H](NC(=O)c2ccc(N3CCN(C4CN(c5ccc6c(c5)C(=O)N(C5CCC(=O)NC5=O)C6=O)C4)CC3)cc2)CC1,"InChI=1S/C41H43ClN8O5/c1-46(30-9-4-26(22-43)35(42)21-30)28-10-5-27(6-11-28)44-38(52)25-2-7-29(8-3-25)47-16-18-48(19-17-47)32-23-49(24-32)31-12-13-33-34(20-31)41(55)50(40(33)54)36-14-15-37(51)45-39(36)53/h2-4,7-9,12-13,20-21,27-28,32,36H,5-6,10-11,14-19,23-24H2,1H3,(H,44,52)(H,45,51,53)/t27-,28-,36?",LUCHABJUYSYJAT-RVWRWSNSSA-N,True
+6,MOTM-September-2021.pdf,0,6,"oral PARP1-DNA selective trapper
+1 mpk QD in PDX model, phase I/II, cancer
+from literature starting point
+Journal of Medicinal Chemistry
+AstraZeneca
+AZD5305 | PARP1
+ay, PDB: 
+NT",AZD5305 , PARP1,CCc1cc2ncc(CN3CCN(c4ccc(C(=O)NC)nc4)CC3)cc2[nH]c1=O,"InChI=1S/C22H26N6O2/c1-3-16-11-19-20(26-21(16)29)10-15(12-24-19)14-27-6-8-28(9-7-27)17-4-5-18(25-13-17)22(30)23-2/h4-5,10-13H,3,6-9,14H2,1-2H3,(H,23,30)(H,26,29)",WQAVGRAETZEADU-UHFFFAOYSA-N,True
+7,MOTM-September-2021.pdf,0,7,"G-protein biased GPCR agonist
+oral 10 mg QD, phase I, cardiovascular
+from HTS and opt.
+bioRxiv
+Sanofi
+SAR247799 | S1P1",SAR247799 , S1P1,Cc1cc(-c2nc3cnc(Oc4cccc(Cl)c4)nc3o2)cc(C)c1OCC(=O)O,"InChI=1S/C21H16ClN3O5/c1-11-6-13(7-12(2)18(11)28-10-17(26)27)19-24-16-9-23-21(25-20(16)30-19)29-15-5-3-4-14(22)8-15/h3-9H,10H2,1-2H3,(H,26,27)",WRBZNIUFAKIIQG-UHFFFAOYSA-N,True
+8,MOTM-September-2021.pdf,0,8,"oral BET inhibitor
+4.5 mg QD, phase I/II for cancer
+from bromodomain-focused HTS, SBDD
+Journal of Medicinal Chemistry
+Bristol Myers Squibb
+BMS-986158 | BET
+DB: ",BMS-986158 , BET,Cc1nnn(C)c1-c1cnc2c3ccc(C(C)(C)O)cc3n([C@H](c3ccccc3)C3CCOCC3)c2c1,"InChI=1S/C30H33N5O2/c1-19-28(34(4)33-32-19)22-16-26-27(31-18-22)24-11-10-23(30(2,3)36)17-25(24)35(26)29(20-8-6-5-7-9-20)21-12-14-37-15-13-21/h5-11,16-18,21,29,36H,12-15H2,1-4H3/t29-/m1/s1",KGERZPVQIRYWRK-GDLZYMKVSA-N,True
+9,MOTM-September-2021.pdf,0,9,"oral protein-complex 1 (OXPHOS) inhibitor
+200-800 mg QD, phase I, cancer/IPF
+from metformin
+J. Pharmacol. Exp. Ther.",oral protein-complex 1 (OXPHOS) inhibitor,"200-800 mg QD, phase I, cancer/IPF",N=C(NC(=N)N1CCCC1)Nc1ccc(OC(F)(F)F)cc1,"InChI=1S/C13H16F3N5O/c14-13(15,16)22-10-5-3-9(4-6-10)19-11(17)20-12(18)21-7-1-2-8-21/h3-6H,1-2,7-8H2,(H4,17,18,19,20)",NGFUHJWVBKTNOE-UHFFFAOYSA-N,True
+10,MOTM-September-2021.pdf,0,10,"oral BACE1-selective inhibitor
+preclinical, QTc observed in dogs
+from literature starting point
+Journal of Medicinal Chemistry
+Janssen Pharmaceutica NV
+JNJ-67569762 | BACE1
+B: ",JNJ-67569762 , BACE1,CCS(=O)(=O)[C@]1(C)CC[C@@](CF)(c2cc(NC(=O)c3cc4c(cn3)OC(F)(F)O4)ccc2F)N=C1N,"InChI=1S/C22H22F4N4O5S/c1-3-36(32,33)20(2)6-7-21(11-23,30-19(20)27)13-8-12(4-5-14(13)24)29-18(31)15-9-16-17(10-28-15)35-22(25,26)34-16/h4-5,8-10H,3,6-7,11H2,1-2H3,(H2,27,30)(H,29,31)/t20-,21-/m1/s1",NDIQAOIHFVWZJQ-NHCUHLMSSA-N,True
+11,MOTM-September-2021.pdf,0,11,"oral gamma secretase modulator
+preclinical PD at 30 mpk single dose
+from opt. of prior oxadiazine GSM
+Journal of Medicinal Chemistry
+FORUM Pharmaceuticals
+FRM-024 | γ-secretase",FRM-024 , γ-secretase,COc1nc(C2=NO[C@H](C3CC3)[C@H](c3ccc(Cl)cc3)N2)ccc1-n1cnc(C)c1,"InChI=1S/C22H22ClN5O2/c1-13-11-28(12-24-13)18-10-9-17(25-22(18)29-2)21-26-19(14-5-7-16(23)8-6-14)20(30-27-21)15-3-4-15/h5-12,15,19-20H,3-4H2,1-2H3,(H,26,27)/t19-,20+/m0/s1",IOQORVDNYPOZPL-VQTJNVASSA-N,True
+12,MOTM-September-2021.pdf,0,12,"oral RORγ nuclear receptor agonist
+450 mg BID, phase I/II, cancer
+from change in MoA of RORγ antagonist + opt.
+Journal of Medicinal Chemistry
+Lycera
+cintirorgon | RORγ",cintirorgon , RORγ,[H]C(F)(F)Oc1cc(F)cc(-c2ccc3c(c2)N(S(=O)(=O)c2cccc(C(F)(F)F)c2)C[C@H](CC(C)(C)C(=O)O)O3)c1,"InChI=1S/C27H23F6NO6S/c1-26(2,24(35)36)13-20-14-34(41(37,38)21-5-3-4-17(11-21)27(31,32)33)22-10-15(6-7-23(22)39-20)16-8-18(28)12-19(9-16)40-25(29)30/h3-12,20,25H,13-14H2,1-2H3,(H,35,36)/t20-/m0/s1",GULSIMHVQYBADX-FQEVSTJZSA-N,True
+13,MOTM-September-2021.pdf,0,13,"purinergic receptor (ion channel) antagonist
+up to 300 mg PO QD, phase IIb, chronic cough
+from opt. of prior P2X3 antagonist
+Bioorganic and Medicinal Chemistry Letters
+Shionogi
+sivopixant | P2X3",sivopixant , P2X3,C[C@@H](Cn1c(=O)[nH]/c(=N\c2ccc(Oc3ccccn3)cc2)n(Cc2ccc(Cl)cc2)c1=O)C(=O)O,"InChI=1S/C25H22ClN5O5/c1-16(22(32)33)14-31-24(34)29-23(30(25(31)35)15-17-5-7-18(26)8-6-17)28-19-9-11-20(12-10-19)36-21-4-2-3-13-27-21/h2-13,16H,14-15H2,1H3,(H,32,33)(H,28,29,34)/t16-/m0/s1",SKZQFKBIJUXXCG-INIZCTEOSA-N,True
