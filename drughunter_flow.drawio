@@ -1,9 +1,24 @@
-<mxfile host="app.diagrams.net" modified="2023-09-25T14:06:35.849Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0" version="21.6.9" etag="SM1tfpZxdvNqPlga2olT" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-25T14:47:26.222Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="32dPTF4htIxiW6fJxb8W" version="21.6.9" type="github">
   <diagram name="Page-1" id="vvLKP6nQ0kpnMnOuwGek">
-    <mxGraphModel>
+    <mxGraphModel dx="1434" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="UlI0JAo9FNJ2orHvCzGF-2" value="&lt;div&gt;&lt;b&gt;Segmentation&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;manual&lt;/div&gt;&lt;div&gt;DECIMER&lt;br&gt;&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="230" y="350" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="UlI0JAo9FNJ2orHvCzGF-3" value="&lt;div&gt;&lt;b&gt;Recognition&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;DECIMER&lt;/div&gt;&lt;div&gt;MolScribe&lt;br&gt;&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="370" y="350" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="UlI0JAo9FNJ2orHvCzGF-4" value="&lt;div&gt;&lt;b&gt;Validation&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;UNICHEM&lt;br&gt;&lt;/div&gt;" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="510" y="350" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="UlI0JAo9FNJ2orHvCzGF-5" value="PDFS" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="350" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="UlI0JAo9FNJ2orHvCzGF-6" value="&lt;div&gt;SMILES&lt;/div&gt;&lt;div&gt;InchiKey&lt;/div&gt;&lt;div&gt;biographic&lt;/div&gt;&lt;div&gt;info...&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="660" y="350" width="90" height="90" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
