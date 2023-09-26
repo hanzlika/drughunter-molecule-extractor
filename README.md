@@ -37,6 +37,11 @@ cd ..
 Feel free to remove the DECIMER and MolScribe repos once they're installed.
 
 If all goes well, Drug Hunter extractor should now be usable
+
+### Note about rdkit version
+It's highly recommended to use the version of rdkit specified within requirments
+Both decimer and molscribe use rdkit to generate smiles and using older versions
+may lead to unexpected effects in the resulting smiles generation (unwanted hybridization for example)
 ## Usage
 
 Invoking help:
